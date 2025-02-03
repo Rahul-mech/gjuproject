@@ -72,46 +72,64 @@
   </style>
 </head>
 <body>
-  <!-- Background Music -->
-  <audio id="theme-music" loop>
+
+  
+<!-- Background Music -->
+<audio id="theme-music" loop>
     <source src="https://github.com/Rahul-mech/gjuproject/raw/refs/heads/main/Himmat.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
-  </audio>
-  
+</audio>
+
+<style>
+  /* Transparent overlay to trigger music */
+  .click-overlay {
+    position: absolute;
+    width: 80%;
+    height: 40px;
+    background: transparent;
+    cursor: pointer;
+    z-index: 10;
+  }
+</style>
+
+<div class="container" id="mainContainer">
+  <!-- University Section -->
+  <div id="universitySection">
+    <h2>Welcome to Classmate</h2>
+    <p>Choose your university:</p>
+    <select id="universitySelect">
+      <option value="">Select University</option>
+      <option value="gju">Guru Jambheshwar University</option>
+    </select>
+    
+    <div style="position: relative;">
+      <button id="proceedBtn" onclick="showSemesterSection()">Proceed</button>
+      <!-- Invisible overlay on top of the button -->
+      <div id="overlayClick" class="click-overlay" onclick="playAudio()"></div>
+    </div>
+  </div>
+</div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let audio = document.getElementById("theme-music");
-        
-        // Try playing immediately (Some browsers may block it)
-        let playPromise = audio.play();
+  function showSemesterSection() {
+    const university = document.getElementById("universitySelect").value;
+    if (university) {
+      document.getElementById("universitySection").style.display = "none";
+      document.getElementById("semesterSection").style.display = "block";
+    }
+  }
 
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log("Autoplay started");
-            }).catch(() => {
-                // If blocked, show a button to start music
-                let button = document.createElement("button");
-                button.innerText = "Play Theme Music";
-                button.style.position = "fixed";
-                button.style.bottom = "10px";
-                button.style.right = "10px";
-                button.style.padding = "10px";
-                button.style.background = "#4CAF50";
-                button.style.color = "white";
-                button.style.border = "none";
-                button.style.cursor = "pointer";
-
-                document.body.appendChild(button);
-
-                button.addEventListener("click", function () {
-                    audio.play();
-                    button.remove(); // Remove button after music starts
-                });
-            });
-        }
-    });
+  function playAudio() {
+    let audio = document.getElementById("theme-music");
+    audio.play().then(() => {
+      console.log("Audio started.");
+      document.getElementById("overlayClick").remove(); // Remove overlay after click
+    }).catch((err) => {
+      console.log("Playback failed", err);
+    });
+  }
 </script>
+  
     
                
                
