@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classmate</title>
+  <style>
+    /* Background Theme */
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Container Styling */
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 30px;
+      width: 400px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      transition: all 0.5s ease;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    p {
+      color: #555;
+    }
+
+    select, button {
+      width: 80%;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      outline: none;
+    }
+
+    select {
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    button {
+      background: #667eea;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #556cd6;
+    }
+
+    /* Hide sections initially */
+    #semesterSection,
+    #subjectSection {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Music -->
+  <audio id="backgroundMusic" autoplay loop>
+    <source src="C:\Users\hp\Music\Himmat.mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="container" id="mainContainer">
+    <!-- University Section -->
+    <div id="universitySection">
+      <h2>Welcome to Classmate</h2>
+      <p>Choose your university:</p>
+      <select id="universitySelect">
+        <option value="">Select University</option>
+        <option value="gju">Guru Jambheshwar University</option>
+      </select>
+      <button onclick="showSemesterSection()">Proceed</button>
+    </div>
+
+    <!-- Semester Section -->
+    <div id="semesterSection">
+      <h2>University Selected</h2>
+      <p>Choose Semester:</p>
+      <select id="semesterSelect">
+        <option value="">Select Semester</option>
+        <option value="1">1st Semester</option>
+        <option value="2">2nd Semester</option>
+      </select>
+      <button onclick="showSubjectSection()">Proceed</button>
+    </div>
+
+    <!-- Subject Section -->
+    <div id="subjectSection">
+      <h2>Semester Selected</h2>
+      <p>Choose Subject:</p>
+      <select id="subjectSelect" onchange="updateSelectedSubject()">
+        <option value="">Select Subject</option>
+        <option value="maths">Maths</option>
+        <option value="bee">Basic Electrical Engineering</option>
+        <option value="physics">Physics</option>
+        <option value="workshop">Workshop</option>
+      </select>
+      <p>Selected Subject: <span id="selectedSubjectText">None</span></p>
+      <button>Proceed</button>
+    </div>
+  </div>
+
+  <script>
+    function showSemesterSection() {
+      const university = document.getElementById("universitySelect").value;
+      if (university) {
+        // Hide university section and show semester section with smooth transition
+        document.getElementById("universitySection").style.display = "none";
+        document.getElementById("semesterSection").style.display = "block";
+      }
+    }
+
+    function showSubjectSection() {
+      const semester = document.getElementById("semesterSelect").value;
+      if (semester) {
+        // Hide semester section and show subject section
+        document.getElementById("semesterSection").style.display = "none";
+        document.getElementById("subjectSection").style.display = "block";
+      }
+    }
+
+    function updateSelectedSubject() {
+      const subject = document.getElementById("subjectSelect").value;
+      document.getElementById("selectedSubjectText").innerText = subject ? subject : "None";
+    }
+  </script>
+</body>
+</html>
