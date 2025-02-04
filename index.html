@@ -72,6 +72,7 @@
   </style>
 </head>
 <body>
+
 <!-- Background Music -->
 <audio id="theme-music" loop>
     <source src="https://github.com/Rahul-mech/gjuproject/raw/refs/heads/main/Himmat.mp3" type="audio/mpeg">
@@ -90,7 +91,7 @@
 </style>
 
 <div class="container" id="mainContainer">
-  <!-- University Section -->
+  <!-- University Selection -->
   <div id="universitySection">
     <h2>Welcome to Classmate</h2>
     <p>Choose your university:</p>
@@ -103,6 +104,29 @@
       <button id="proceedBtn" onclick="proceedAndPlay()">Proceed</button>
       <div class="click-overlay" id="autoClick" onclick="playAudio()"></div>
     </div>
+  </div>
+
+  <!-- Semester Selection -->
+  <div id="semesterSection">
+    <h2>Your unknown CLASSMATE of GJU University is here to guide you.</h2>
+    <p>Select your semester:</p>
+    <select id="semesterSelect" onchange="showSubjectSection()">
+      <option value="">Select Semester</option>
+      <option value="1st">1st Semester</option>
+    </select>
+  </div>
+
+  <!-- Subject Selection -->
+  <div id="subjectSection">
+    <h2>Choose your subject</h2>
+    <select id="subjectSelect" onchange="updateSelectedSubject()">
+      <option value="">Select Subject</option>
+      <option value="Physics">Physics</option>
+      <option value="BEE">Basic Electrical Engineering</option>
+      <option value="Workshop">Workshop</option>
+      <option value="Maths">Maths</option>
+    </select>
+    <p>Selected Subject: <span id="selectedSubjectText">None</span></p>
   </div>
 </div>
 
@@ -127,32 +151,20 @@
     // Remove overlay after click to avoid interference
     document.getElementById("autoClick").remove();
   }
+
+  function showSubjectSection() {
+    const semester = document.getElementById("semesterSelect").value;
+    if (semester) {
+      document.getElementById("semesterSection").style.display = "none";
+      document.getElementById("subjectSection").style.display = "block";
+    }
+  }
+
+  function updateSelectedSubject() {
+    const subject = document.getElementById("subjectSelect").value;
+    document.getElementById("selectedSubjectText").innerText = subject ? subject : "None";
+  }
 </script>
-  
 
-  <script>
-    function showSemesterSection() {
-      const university = document.getElementById("universitySelect").value;
-      if (university) {
-        // Hide university section and show semester section with smooth transition
-        document.getElementById("universitySection").style.display = "none";
-        document.getElementById("semesterSection").style.display = "block";
-      }
-    }
-
-    function showSubjectSection() {
-      const semester = document.getElementById("semesterSelect").value;
-      if (semester) {
-        // Hide semester section and show subject section
-        document.getElementById("semesterSection").style.display = "none";
-        document.getElementById("subjectSection").style.display = "block";
-      }
-    }
-
-    function updateSelectedSubject() {
-      const subject = document.getElementById("subjectSelect").value;
-      document.getElementById("selectedSubjectText").innerText = subject ? subject : "None";
-    }
-  </script>
 </body>
 </html>
