@@ -10,17 +10,20 @@
       margin: 0;
       font-family: 'Arial', sans-serif;
       background: linear-gradient(135deg, #667eea, #764ba2);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    /* Container Styling */
+    /* Responsive Container */
     .container {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 12px;
-      padding: 30px;
+      padding: 20px;
+      max-width: 90%;
       width: 400px;
       box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
       text-align: center;
@@ -31,20 +34,23 @@
       margin-bottom: 15px;
       color: #333;
       font-weight: 600;
+      font-size: 22px;
     }
 
     p {
       color: #555;
+      font-size: 16px;
     }
 
     select, button {
-      width: 80%;
-      padding: 10px;
-      margin: 15px 0;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
       border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 16px;
       outline: none;
+      transition: 0.3s ease;
     }
 
     select {
@@ -57,7 +63,6 @@
       border: none;
       color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
 
     button:hover {
@@ -69,6 +74,22 @@
     #subjectSection {
       display: none;
     }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+        width: 100%;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      p, select, button {
+        font-size: 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -79,17 +100,6 @@
     Your browser does not support the audio element.
 </audio>
 
-<style>
-  /* Transparent clickable overlay */
-  .click-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: 10;
-  }
-</style>
-
 <div class="container" id="mainContainer">
   <!-- University Selection -->
   <div id="universitySection">
@@ -99,11 +109,7 @@
       <option value="">Select University</option>
       <option value="gju">Guru Jambheshwar University</option>
     </select>
-    
-    <div style="position: relative;">
-      <button id="proceedBtn" onclick="proceedAndPlay()">Proceed</button>
-      <div class="click-overlay" id="autoClick" onclick="playAudio()"></div>
-    </div>
+    <button id="proceedBtn" onclick="proceedAndPlay()">Proceed</button>
   </div>
 
   <!-- Semester Selection -->
@@ -147,9 +153,6 @@
     }).catch((err) => {
       console.log("Playback blocked", err);
     });
-
-    // Remove overlay after click to avoid interference
-    document.getElementById("autoClick").remove();
   }
 
   function showSubjectSection() {
