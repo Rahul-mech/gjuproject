@@ -58,6 +58,40 @@
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
     }
 
+    /* Contact Links Positioning */
+    .contact-links {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .email-link {
+      font-size: 18px;
+      text-decoration: none;
+      color: #0077b5;
+      font-weight: bold;
+    }
+
+    .instagram-button {
+      font-size: 18px;
+      text-decoration: none;
+      background-color: #E4405F;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .instagram-button:hover {
+      background-color: #C13584;
+    }
+
+    /* Media Query for Responsiveness */
     @media (max-width: 768px) {
       h2 {
         font-size: 24px;
@@ -86,6 +120,12 @@
 <div class="section">Interested in learning apart from academics?</div>
 <div>
   <button class="btn" onclick="window.location.href='indian_market.html'">Indian Market</button>
+</div>
+
+<!-- Contact Links at Bottom Left -->
+<div class="contact-links">
+  <a href="mailto:rakshitbishnoi2955@gmail.com" class="email-link">Contact via Gmail</a>
+  <a href="https://www.instagram.com/ibishnoi.rahul_29/" class="instagram-button" target="_blank">Follow on Instagram</a>
 </div>
 
 </body>
