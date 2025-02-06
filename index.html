@@ -3,31 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Classmate - Home</title>
+  <title>Classmate - Rotating Background</title>
   <style>
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: url('https://github.com/Rahul-mech/gjuproject/blob/main/Universityback.jpg') no-repeat center center fixed;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      background: url('https://raw.githubusercontent.com/Rahul-mech/gjuproject/main/0152a5d6-726c-4ade-b30a-ace787c68e49.jpg') no-repeat center center fixed;
       background-size: cover;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      min-height: 100vh;
+      animation: rotateBackground 60s linear infinite;
+    }
+
+    @keyframes rotateBackground {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
-      margin-bottom: 40px;
+      color: white;
     }
 
     h2 {
-      color: white; /* White for visibility */
       font-size: 32px;
       font-weight: bold;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Text shadow effect for better visibility */
     }
 
     .btn {
@@ -46,66 +55,6 @@
     .btn:hover {
       background: #556cd6;
       transform: scale(1.05);
-    }
-
-    .section {
-      margin-top: 40px;
-      padding: 20px;
-      text-align: center;
-      color: lightgray; /* Light gray for section text */
-      font-size: 22px;
-      font-weight: bold;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Text shadow for better visibility */
-    }
-
-    /* Contact Links Positioning */
-    .contact-links {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .contact-button {
-      font-size: 18px;
-      text-decoration: none;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 200px; /* Makes the buttons a consistent size */
-      text-align: center;
-    }
-
-    .gmail-button {
-      background-color: #0077b5; /* Gmail blue */
-    }
-
-    .gmail-button:hover {
-      background-color: #004a74;
-    }
-
-    .instagram-button {
-      background-color: #E4405F; /* Instagram red */
-    }
-
-    .instagram-button:hover {
-      background-color: #C13584;
-    }
-
-    /* Media Query for Responsiveness */
-    @media (max-width: 768px) {
-      h2 {
-        font-size: 24px;
-      }
-      .btn {
-        font-size: 16px;
-        padding: 12px;
-      }
     }
   </style>
 </head>
@@ -126,12 +75,6 @@
 <div class="section">Interested in learning apart from academics?</div>
 <div>
   <button class="btn" onclick="window.location.href='indian_market.html'">Indian Market</button>
-</div>
-
-<!-- Contact Links at Bottom Left -->
-<div class="contact-links">
-  <a href="mailto:rakshitbishnoi2955@gmail.com" class="contact-button gmail-button">Contact via Gmail</a>
-  <a href="https://www.instagram.com/ibishnoi.rahul_29/" class="contact-button instagram-button" target="_blank">Follow on Instagram</a>
 </div>
 
 </body>
