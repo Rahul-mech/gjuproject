@@ -68,23 +68,29 @@
       gap: 10px;
     }
 
-    .email-link {
+    .contact-button {
       font-size: 18px;
       text-decoration: none;
-      color: #0077b5;
-      font-weight: bold;
-    }
-
-    .instagram-button {
-      font-size: 18px;
-      text-decoration: none;
-      background-color: #E4405F;
       color: white;
       padding: 10px 20px;
       border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 200px; /* Makes the buttons a consistent size */
+      text-align: center;
+    }
+
+    .gmail-button {
+      background-color: #0077b5; /* Gmail blue */
+    }
+
+    .gmail-button:hover {
+      background-color: #004a74;
+    }
+
+    .instagram-button {
+      background-color: #E4405F; /* Instagram red */
     }
 
     .instagram-button:hover {
@@ -124,8 +130,8 @@
 
 <!-- Contact Links at Bottom Left -->
 <div class="contact-links">
-  <a href="mailto:rakshitbishnoi2955@gmail.com" class="email-link">Contact via Gmail</a>
-  <a href="https://www.instagram.com/ibishnoi.rahul_29/" class="instagram-button" target="_blank">Follow on Instagram</a>
+  <a href="mailto:rakshitbishnoi2955@gmail.com" class="contact-button gmail-button">Contact via Gmail</a>
+  <a href="https://www.instagram.com/ibishnoi.rahul_29/" class="contact-button instagram-button" target="_blank">Follow on Instagram</a>
 </div>
 
 </body>
