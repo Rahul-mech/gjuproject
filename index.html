@@ -4,51 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Classmate - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      background: url('https://raw.githubusercontent.com/Rahul-mech/gjuproject/main/0152a5d6-726c-4ade-b30a-ace787c68e49.jpg') no-repeat center center/cover;
       height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow: hidden;
     }
-    button:hover {
-  background-color: #555cd6;
-  transform: scale(1.05); /* Slightly enlarges the button */
-}
-<button class="btn"><i class="fas fa-book"></i> Previous Year Questions</button>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-body {
-  background-image: url('background-image.jpg');
-  background-size: cover;
-}
-@media (max-width: 768px) {
-  .container {
-    width: 100%;
-    padding: 20px;
-  }
-  button {
-    width: 100%;
-    font-size: 16px;
-  }
-}
-<footer>
-  <p>Connect with us: <a href="mailto:rakshitbishnoi2955@gmail.com">Email Us</a></p>
-</footer>
-
 
     .container {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 15px;
       padding: 40px;
       width: 70%;
       max-width: 800px;
       box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
       text-align: center;
+      animation: fadeIn 2s ease-in-out;
+      transform: perspective(1000px) rotateX(10deg);
     }
 
     h2 {
@@ -56,6 +36,7 @@ body {
       color: #333;
       font-weight: 700;
       font-size: 28px;
+      animation: floatText 3s infinite alternate ease-in-out;
     }
 
     p {
@@ -73,18 +54,29 @@ body {
       margin: 10px;
       cursor: pointer;
       border-radius: 8px;
-      transition: background 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
     }
 
     .btn:hover {
       background: #556cd6;
+      transform: scale(1.05);
     }
 
-    /* Section for market updates */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes floatText {
+      from { transform: perspective(1000px) rotateX(10deg) translateY(0px); }
+      to { transform: perspective(1000px) rotateX(10deg) translateY(10px); }
+    }
+
+    /* Market Section */
     #market-section {
       margin-top: 40px;
       padding: 20px;
-      background: #f0f0f0;
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 8px;
       text-align: center;
     }
@@ -99,7 +91,6 @@ body {
       color: #666;
     }
 
-    /* Responsive for small screens */
     @media (max-width: 768px) {
       .container {
         width: 90%;
@@ -136,9 +127,7 @@ body {
 </div>
 
 <script>
-  // Example: You can update this dynamically each day
-  document.getElementById("nifty-levels").innerText = "Nifty50: 17,000 (This is a placeholder)"; // Replace with actual data
-
+  document.getElementById("nifty-levels").innerText = "Nifty50: 17,000 (This is a placeholder)";
 </script>
 
 </body>
