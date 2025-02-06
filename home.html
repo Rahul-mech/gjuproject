@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classmate - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 40px;
+      width: 70%;
+      max-width: 800px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 700;
+      font-size: 28px;
+    }
+
+    p {
+      color: #555;
+      font-size: 18px;
+    }
+
+    .btn {
+      background: #667eea;
+      border: none;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 14px 30px;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #556cd6;
+    }
+
+    /* Section for market updates */
+    #market-section {
+      margin-top: 40px;
+      padding: 20px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    #market-section h3 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    #market-section p {
+      font-size: 18px;
+      color: #666;
+    }
+
+    /* Responsive for small screens */
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+        padding: 30px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+      .btn {
+        font-size: 16px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Welcome to Classmate</h2>
+  <p>Choose an option below:</p>
+
+  <!-- Student's Corner Section -->
+  <div>
+    <button class="btn" onclick="window.location.href='index.html'">Previous Year Questions</button>
+    <button class="btn" onclick="window.location.href='extra_resources.html'">Extra Resources</button>
+  </div>
+
+  <!-- Market Section -->
+  <div id="market-section">
+    <h3>Share Market Updates</h3>
+    <p><strong>Nifty50 Levels for Today:</strong></p>
+    <p id="nifty-levels">Loading Nifty50 Levels...</p>
+  </div>
+</div>
+
+<script>
+  // Example: You can update this dynamically each day
+  document.getElementById("nifty-levels").innerText = "Nifty50: 17,000 (This is a placeholder)"; // Replace with actual data
+
+</script>
+
+</body>
+</html>
