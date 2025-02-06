@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Classmate - Home</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
       margin: 0;
@@ -16,36 +15,18 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      overflow: hidden;
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 15px;
-      padding: 40px;
-      width: 70%;
-      max-width: 800px;
-      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+      color: white;
       text-align: center;
-      animation: fadeIn 2s ease-in-out;
-      transform: perspective(1000px) rotateX(10deg);
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
     }
 
     h2 {
-      margin-bottom: 20px;
-      color: #333;
-      font-weight: 700;
-      font-size: 28px;
-      animation: floatText 3s infinite alternate ease-in-out;
-    }
-
-    p {
-      color: #555;
-      font-size: 18px;
+      font-size: 36px;
+      font-weight: bold;
     }
 
     .btn {
-      background: #667eea;
+      background: rgba(102, 126, 234, 0.9);
       border: none;
       color: white;
       font-size: 20px;
@@ -55,49 +36,25 @@
       cursor: pointer;
       border-radius: 8px;
       transition: transform 0.3s ease, background 0.3s ease;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
     }
 
     .btn:hover {
-      background: #556cd6;
+      background: rgba(85, 92, 214, 0.9);
       transform: scale(1.05);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes floatText {
-      from { transform: perspective(1000px) rotateX(10deg) translateY(0px); }
-      to { transform: perspective(1000px) rotateX(10deg) translateY(10px); }
-    }
-
-    /* Market Section */
     #market-section {
-      margin-top: 40px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.8);
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.6);
       border-radius: 8px;
-      text-align: center;
-    }
-
-    #market-section h3 {
-      font-size: 24px;
-      color: #333;
-    }
-
-    #market-section p {
-      font-size: 18px;
-      color: #666;
+      display: inline-block;
     }
 
     @media (max-width: 768px) {
-      .container {
-        width: 90%;
-        padding: 30px;
-      }
       h2 {
-        font-size: 22px;
+        font-size: 28px;
       }
       .btn {
         font-size: 16px;
@@ -108,22 +65,16 @@
 </head>
 <body>
 
-<div class="container">
-  <h2>Welcome to Classmate</h2>
-  <p>Choose an option below:</p>
+<h2>Welcome to Classmate</h2>
+<p>Choose an option below:</p>
 
-  <!-- Student's Corner Section -->
-  <div>
-    <button class="btn" onclick="window.location.href='previous_year_questions.html'">Previous Year Questions</button>
-    <button class="btn" onclick="window.location.href='extra_resources.html'">Extra Resources</button>
-  </div>
+<button class="btn" onclick="window.location.href='previous_year_questions.html'">Previous Year Questions</button>
+<button class="btn" onclick="window.location.href='extra_resources.html'">Extra Resources</button>
 
-  <!-- Market Section -->
-  <div id="market-section">
-    <h3>Share Market Updates</h3>
-    <p><strong>Nifty50 Levels for Today:</strong></p>
-    <p id="nifty-levels">Loading Nifty50 Levels...</p>
-  </div>
+<div id="market-section">
+  <h3>Share Market Updates</h3>
+  <p><strong>Nifty50 Levels for Today:</strong></p>
+  <p id="nifty-levels">Loading Nifty50 Levels...</p>
 </div>
 
 <script>
