@@ -25,6 +25,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       flex-wrap: wrap;
       position: relative;
+      justify-content: center; /* Center items horizontally */
     }
 
     /* Green faded tube around the first section (above and below) */
@@ -50,23 +51,22 @@
 
     /* Logo container */
     .logo-container {
-      flex: 1 1 150px;
+      flex: 1;
       text-align: left;
+      width: 150px;
     }
 
     /* Logo styling */
     .logo {
-      width: 150px;
-      height: 150px;
+      width: 100%;
+      height: auto;
       border-radius: 50%; /* Circular logo */
       object-fit: cover;
-      object-position: center;
     }
 
     /* Main site title (CLASSMATE) in the center */
     .site-title {
-      text-align: right;
-      margin-right: 10px;
+      text-align: center;
       flex: 1;
     }
 
@@ -134,19 +134,13 @@
     /* Responsive for mobile */
     @media (max-width: 768px) {
       .top-section {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        justify-content: center;
       }
 
       .site-title {
         text-align: center;
         margin-top: 10px;
-      }
-
-      .top-section::before,
-      .top-section::after {
-        left: 0;
-        right: 0;
       }
 
       .logo-container {
@@ -163,14 +157,14 @@
 
       /* Menu Section adjustments for mobile */
       .menu {
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
       }
 
       .menu-item {
         margin: 5px 0;
         flex: none;
-        width: 100%;
+        width: auto;
       }
     }
   </style>
@@ -187,7 +181,7 @@
       />
     </div>
 
-    <!-- Centered Site Title and Tagline (with distance from right) -->
+    <!-- Centered Site Title and Tagline -->
     <div class="site-title">
       <h1>CLASSMATE</h1>
       <p>A Project By Mechanical Engineers</p>
