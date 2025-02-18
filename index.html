@@ -11,7 +11,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f0f0f0; /* subtle gray to contrast with the white top section */
+      background: #f0f0f0;
       color: #333;
     }
 
@@ -19,8 +19,9 @@
     .top-section {
       background: #fff;
       padding: 20px;
-      display: flex; /* Allows logo and text side-by-side */
-      align-items: center; /* Vertically center logo and text */
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Distribute content on both sides */
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
@@ -33,18 +34,35 @@
     .logo {
       width: 150px;
       height: 150px;
-      border-radius: 50%;      /* Makes the image circular */
-      object-fit: cover;       /* Ensures the image fills the circle properly */
-      object-position: center; /* Centers the image within the circle */
+      border-radius: 50%; /* Circular logo */
+      object-fit: cover;
+      object-position: center;
     }
 
-    /* Intro text next to the logo */
+    /* Main site title (CLASSMATE) in the center */
+    .site-title {
+      text-align: center;
+      flex: 1; /* Ensure title takes up remaining space */
+    }
+
+    .site-title h1 {
+      font-size: 36px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    .site-title p {
+      font-size: 14px;
+      color: #667eea; /* Blue color for the tagline */
+    }
+
+    /* Description text to the right of the logo */
     .intro-text {
-      font-size: 18px;  /* Increased font size */
-      line-height: 1.6; /* Increased line height for better readability */
-      font-weight: bold; /* Make the text bold */
-      color: #444; /* Slightly darker color for better contrast */
-      max-width: 600px; /* Limiting width to avoid long lines */
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: bold;
+      color: #444;
+      max-width: 600px;
     }
 
     /* Separator styling */
@@ -52,7 +70,7 @@
       width: 80%;
       max-width: 900px;
       margin: 10px auto;
-      border-top: 4px solid #667eea; /* Increased thickness of the separator */
+      border-top: 4px solid #667eea;
     }
 
     /* Menu Section styling */
@@ -80,7 +98,7 @@
     /* Background Image Section styling */
     .bg-image {
       width: 100%;
-      height: 600px; /* Adjust height as needed */
+      height: 600px;
       background-image: url("https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.18.19%20-%20A%20high-resolution%2C%20epic%20scene%20depicting%20Lord%20Krishna%20giving%20the%20Bhagavad%20Gita%20to%20Arjuna%20on%20a%20chariot.%20On%20the%20left%20side%20of%20the%20image%2C%20Arjuna%20is%20sitting.webp");
       background-size: cover;
       background-position: center;
@@ -100,7 +118,13 @@
       />
     </div>
 
-    <!-- Expanded Intro Text -->
+    <!-- Centered Site Title and Tagline -->
+    <div class="site-title">
+      <h1>CLASSMATE</h1>
+      <p>A Project By Mechanical Engineers</p>
+    </div>
+
+    <!-- Expanded Intro Text (on the right side) -->
     <div class="intro-text">
       <p>
         Here you will get regular materials for your study. For previous year
