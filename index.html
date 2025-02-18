@@ -23,7 +23,7 @@
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: relative;
+      border: 2px solid green; /* Green border around first section */
     }
 
     /* Logo container */
@@ -57,47 +57,13 @@
       color: #667eea;
     }
 
-    /* Intro text below image of Krishna */
+    /* Description text to the right of the logo */
     .intro-text {
       font-size: 18px;
       line-height: 1.6;
       font-weight: bold;
       color: #444;
-      margin: 20px auto;
-      max-width: 800px;
-      text-align: center;
-    }
-
-    /* Green Button Style */
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      margin: 10px 5px;
-      background-color: #4CAF50;
-      color: white;
-      text-align: center;
-      border-radius: 5px;
-      text-decoration: none;
-      width: auto;
-      transition: background-color 0.3s ease, padding-right 0.3s ease;
-    }
-
-    .button:hover {
-      background-color: #45a049;
-      padding-right: 30px; /* Adds a filling effect on hover */
-    }
-
-    /* Green rectangular box on first section boundary */
-    .top-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border: 4px solid #4CAF50;
-      border-radius: 10px;
-      pointer-events: none;
+      max-width: 600px;
     }
 
     /* Separator styling */
@@ -115,21 +81,22 @@
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
-      padding: 5px 0;
+      padding: 10px 0;
     }
-
     .menu-item {
       flex: 1;
       text-align: center;
-      padding: 10px 0;
+      padding: 10px;
       margin: 0 5px;
-      border: 1px solid transparent;
-      transition: border-color 0.3s ease;
+      border: 2px solid green; /* Green button border */
+      background: transparent;
+      color: #333;
       cursor: pointer;
+      transition: background 0.3s ease;
     }
-
     .menu-item:hover {
-      border-color: #667eea;
+      background: green;
+      color: white;
     }
 
     /* Background Image Section styling */
@@ -141,47 +108,56 @@
       background-position: center;
       background-repeat: no-repeat;
     }
+
+    /* Student's Board Button */
+    .students-board {
+      width: 200px;
+      margin: 20px auto;
+      text-align: center;
+      padding: 10px;
+      border: 2px solid green;
+      color: #333;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .students-board:hover {
+      background: green;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <!-- Top Section -->
   <div class="top-section">
-    <!-- Logo Container -->
     <div class="logo-container">
-      <img
-        src="https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.49.50%20-%20A%20refined%20round%20logo%20design%20featuring%20the%20word%20'Bishnoi'%20in%20large%2C%20bold%20typography%20at%20the%20center.%20Surrounding%20the%20word%2C%20the%20phrase%20'Indian%20Student's%20O.webp"
-        alt="Bishnoi Logo"
-        class="logo"
-      />
+      <img src="https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.49.50%20-%20A%20refined%20round%20logo%20design%20featuring%20the%20word%20'Bishnoi'%20in%20large%2C%20bold%20typography%20at%20the%20center.%20Surrounding%20the%20word%2C%20the%20phrase%20'Indian%20Student's%20O.webp" alt="Bishnoi Logo" class="logo" />
     </div>
-
-    <!-- Centered Site Title and Tagline -->
     <div class="site-title">
       <h1>CLASSMATE</h1>
       <p>A Project By Mechanical Engineers</p>
     </div>
+    <div class="intro-text">
+      <p>Here you will get regular materials for your study. For previous year questions, notes, and other activities and reports regarding your college, you can visit us. Here, we will guide your study like your classmate.</p>
+    </div>
   </div>
 
-  <!-- Intro Text Below Krishna Image -->
-  <div class="bg-image"></div>
-  <div class="intro-text">
-    <p>
-      This site is built by students of GJUST for the help and guidance of students in various matters in the educational field. Here we will be providing PYQs along with notes and guide you like your classmate.
-    </p>
-  </div>
-
-  <!-- Student's Board Option -->
+  <!-- First Separator Line -->
   <div class="separator"></div>
-  <a href="students_board.html" class="button">Student's Board</a>
+
+  <!-- Menu Section (Buttons above Krishna image) -->
+  <div class="menu">
+    <div class="menu-item" onclick="window.location.href='previous_year_questions.html'">Previous Year</div>
+    <div class="menu-item" onclick="window.location.href='extra_resources.html'">Extra Resources</div>
+    <div class="menu-item" onclick="window.location.href='your_syllabus.html'">Your Syllabus</div>
+  </div>
 
   <!-- Second Separator Line -->
   <div class="separator"></div>
 
-  <!-- Menu Section with Green Buttons -->
-  <div class="menu">
-    <a href="previous_year_questions.html" class="button">Previous Year</a>
-    <a href="extra_resources.html" class="button">Extra Resources</a>
-    <a href="your_syllabus.html" class="button">Your Syllabus</a>
-  </div>
+  <!-- Background Image Section (Krishna Image) -->
+  <div class="bg-image"></div>
+
+  <!-- Student's Board Button (Below Text) -->
+  <div class="students-board" onclick="window.location.href='students_board.html'">Student's Board</div>
 </body>
 </html>
