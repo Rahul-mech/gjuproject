@@ -28,9 +28,8 @@
 
     /* Logo container */
     .logo-container {
-      margin-right: 20px;
       flex: 1 1 150px; /* Allow flexibility for the logo to adjust */
-      text-align: center;
+      text-align: left; /* Align logo to the left */
     }
 
     /* Logo styling */
@@ -44,8 +43,9 @@
 
     /* Main site title (CLASSMATE) in the center */
     .site-title {
-      text-align: center;
-      flex: 2;
+      text-align: right; /* Align text to the right */
+      margin-right: 10px; /* Distance from right side */
+      flex: 1;
     }
 
     .site-title h1 {
@@ -59,34 +59,22 @@
       color: #667eea; /* Blue color for the tagline */
     }
 
+    /* Second Section (after Krishna Image) */
+    .intro-text {
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: bold;
+      color: #444;
+      margin-top: 20px;
+      text-align: center;
+    }
+
     /* Separator styling */
     .separator {
       width: 80%;
       max-width: 900px;
       margin: 7px auto; /* Reduced margin by 30% */
       border-top: 4px solid #667eea;
-    }
-
-    /* Menu Section styling */
-    .menu {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      padding: 5px 0;
-    }
-    .menu-item {
-      flex: 1;
-      text-align: center;
-      padding: 10px 0;
-      margin: 0 5px;
-      border: 1px solid transparent;
-      transition: border-color 0.3s ease;
-      cursor: pointer;
-    }
-    .menu-item:hover {
-      border-color: #667eea;
     }
 
     /* Background Image Section styling */
@@ -98,54 +86,6 @@
       background-position: center;
       background-repeat: no-repeat;
     }
-
-    /* Media Queries for smaller devices */
-    @media only screen and (max-width: 768px) {
-      .top-section {
-        flex-wrap: wrap; /* Items will wrap if needed */
-        padding: 15px;
-        justify-content: center; /* Center the content */
-      }
-
-      .logo-container, .site-title {
-        flex: 1 1 100%; /* Allow each item to take up full width */
-        text-align: center;
-      }
-
-      .logo {
-        width: 120px;
-        height: 120px;
-      }
-
-      .site-title h1 {
-        font-size: 30px;
-      }
-
-      .site-title p {
-        font-size: 12px;
-      }
-
-      .menu {
-        flex-direction: row; /* Ensure options are in a row */
-        width: 100%;
-        justify-content: space-evenly; /* Evenly space the items */
-        padding: 10px 0;
-      }
-
-      .menu-item {
-        flex: 1;
-        text-align: center;
-        padding: 12px 0;
-        margin: 5px;
-        width: 30%; /* Make each item a bit more compact */
-      }
-
-      .separator {
-        width: 90%;
-        max-width: 100%;
-      }
-    }
-
   </style>
 </head>
 <body>
@@ -160,7 +100,7 @@
       />
     </div>
 
-    <!-- Centered Site Title and Tagline -->
+    <!-- Centered Site Title and Tagline (with distance from right) -->
     <div class="site-title">
       <h1>CLASSMATE</h1>
       <p>A Project By Mechanical Engineers</p>
@@ -170,17 +110,17 @@
   <!-- First Separator Line -->
   <div class="separator"></div>
 
-  <!-- Menu Section -->
-  <div class="menu">
-    <div class="menu-item" onclick="window.location.href='previous_year_questions.html'">Previous Year</div>
-    <div class="menu-item" onclick="window.location.href='extra_resources.html'">Extra Resources</div>
-    <div class="menu-item" onclick="window.location.href='your_syllabus.html'">Your Syllabus</div>
-  </div>
-
-  <!-- Second Separator Line -->
-  <div class="separator"></div>
-
-  <!-- Background Image Section -->
+  <!-- Background Image Section (Krishna) -->
   <div class="bg-image"></div>
+
+  <!-- Text after Krishna image -->
+  <div class="intro-text">
+    <p>
+      Here you will get regular materials for your study. For previous year
+      questions, notes, and other activities and reports regarding your
+      college, you can visit us. Here, we will guide your study like your
+      classmate.
+    </p>
+  </div>
 </body>
 </html>
