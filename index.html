@@ -69,7 +69,7 @@
     .separator {
       width: 80%;
       max-width: 900px;
-      margin: 10px auto;
+      margin: 7px auto; /* Reduced margin by 30% */
       border-top: 4px solid #667eea;
     }
 
@@ -113,6 +113,20 @@
         padding: 15px;
       }
 
+      .logo-container {
+        order: 1; /* Ensure the logo stays on top */
+      }
+
+      .site-title {
+        order: 2; /* Site title stays in the middle */
+      }
+
+      .intro-text {
+        order: 3; /* Description text goes to the bottom */
+        text-align: center;
+        max-width: 90%; /* Allow more room on smaller screens */
+      }
+
       .logo {
         width: 120px;
         height: 120px;
@@ -124,12 +138,6 @@
 
       .site-title p {
         font-size: 12px;
-      }
-
-      .intro-text {
-        font-size: 16px;
-        text-align: center;
-        max-width: 90%; /* Allow more room on smaller screens */
       }
 
       .menu {
