@@ -5,75 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Classmate - Home</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: #1b1b1b;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      color: white;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0; /* subtle gray to contrast with the white top section */
+      color: #333;
     }
-
-    .top-box {
-      background: rgba(0, 0, 0, 0.8);
+    /* Top Section with white background */
+    .top-section {
+      background: #fff;
       padding: 20px;
-      width: 80%;
-      max-width: 900px;
       text-align: center;
-      border-radius: 12px;
-      margin-top: 20px;
-      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
-    h2 {
-      font-size: 28px;
+    .top-section .logo {
+      width: 150px; /* Adjust size as needed */
       margin-bottom: 10px;
     }
-
-    .btn {
-      background: #667eea;
-      border: none;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      padding: 12px 25px;
-      margin: 10px;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background 0.3s ease, transform 0.2s;
+    .top-section p {
+      font-size: 16px;
+      margin: 0;
     }
-
-    .btn:hover {
-      background: #556cd6;
-      transform: scale(1.05);
-    }
-
-    .image-container {
-      margin-top: 30px;
+    /* Separator styling */
+    .separator {
       width: 80%;
       max-width: 900px;
+      margin: 10px auto;
+      border-top: 2px solid #ddd;
     }
-
-    .image-container img {
+    /* Menu Section styling */
+    .menu {
+      width: 80%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+    }
+    .menu-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      margin: 0 5px;
+      border: 1px solid transparent;
+      transition: border-color 0.3s ease;
+      cursor: pointer;
+    }
+    .menu-item:hover {
+      border-color: #667eea;
+    }
+    /* Background Image Section styling */
+    .bg-image {
       width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+      height: 600px; /* Adjust height as needed */
+      background-image: url("https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.18.19%20-%20A%20high-resolution%2C%20epic%20scene%20depicting%20Lord%20Krishna%20giving%20the%20Bhagavad%20Gita%20to%20Arjuna%20on%20a%20chariot.%20On%20the%20left%20side%20of%20the%20image%2C%20Arjuna%20is%20sitting.webp");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
   </style>
 </head>
 <body>
-  <div class="top-box">
-    <h2>Welcome to Classmate</h2>
-    <p>Choose an option below:</p>
-    <button class="btn" onclick="window.location.href='previous_year_questions.html'">Previous Year Questions</button>
-    <button class="btn" onclick="window.location.href='extra_resources.html'">Extra Resources</button>
-    <button class="btn" onclick="window.location.href='your_syllabus.html'">Your Syllabus</button>
+  <!-- Top Section -->
+  <div class="top-section">
+    <!-- Replace 'logo.png' with your actual logo file path -->
+    <img src="logo.png" alt="Logo" class="logo">
+    <p>This site is built by students of GJUST for the help and guidance of students in various matters in the educational field.</p>
   </div>
-  <div class="image-container">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2rnSoJxehsA3MeF_vf40AH1suywRnA0hpYg&s" alt="Krishna Giving Gita">
+
+  <!-- First Separator Line -->
+  <div class="separator"></div>
+
+  <!-- Menu Section -->
+  <div class="menu">
+    <div class="menu-item" onclick="window.location.href='previous_year_questions.html'">Previous Year</div>
+    <div class="menu-item" onclick="window.location.href='extra_resources.html'">Extra Resources</div>
+    <div class="menu-item" onclick="window.location.href='your_syllabus.html'">Your Syllabus</div>
   </div>
+
+  <!-- Second Separator Line -->
+  <div class="separator"></div>
+
+  <!-- Background Image Section -->
+  <div class="bg-image"></div>
 </body>
 </html>
