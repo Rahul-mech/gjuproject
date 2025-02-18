@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Classmate - Home</title>
   <style>
     * {
@@ -11,36 +11,73 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f0f0f0; /* subtle gray to contrast with the white top section */
+      background: #f0f0f0;
       color: #333;
     }
+
     /* Top Section with white background */
     .top-section {
       background: #fff;
       padding: 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .top-section .logo {
-      width: 150px; /* Adjust size as needed */
-      margin-bottom: 10px;
+
+    /* Logo container */
+    .logo-container {
+      margin-right: 20px; /* Space between logo and text */
     }
-    .top-section p {
-      font-size: 16px;
-      margin: 0;
+
+    /* Logo styling */
+    .logo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%; /* Circular logo */
+      object-fit: cover;
+      object-position: center;
     }
+
+    /* Main site title (CLASSMATE) in the center */
+    .site-title {
+      text-align: center;
+      flex: 1; /* Ensure title takes up remaining space */
+    }
+
+    .site-title h1 {
+      font-size: 36px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    .site-title p {
+      font-size: 14px;
+      color: #667eea; /* Blue color for the tagline */
+    }
+
+    /* Description text to the right of the logo */
+    .intro-text {
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: bold;
+      color: #444;
+      max-width: 600px;
+    }
+
     /* Separator styling */
     .separator {
       width: 80%;
       max-width: 900px;
       margin: 10px auto;
-      border-top: 2px solid #ddd;
+      border-top: 4px solid #667eea;
     }
+
     /* Menu Section styling */
     .menu {
-      width: 50%; /* Reduce width to make section more compact */
-      max-width: 600px;
-      margin: 0 auto; /* Center the menu */
+      width: 80%;
+      max-width: 800px; /* Reduced width for better alignment */
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       padding: 5px 0;
@@ -57,10 +94,11 @@
     .menu-item:hover {
       border-color: #667eea;
     }
+
     /* Background Image Section styling */
     .bg-image {
       width: 100%;
-      height: 600px; /* Adjust height as needed */
+      height: 600px;
       background-image: url("https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.18.19%20-%20A%20high-resolution%2C%20epic%20scene%20depicting%20Lord%20Krishna%20giving%20the%20Bhagavad%20Gita%20to%20Arjuna%20on%20a%20chariot.%20On%20the%20left%20side%20of%20the%20image%2C%20Arjuna%20is%20sitting.webp");
       background-size: cover;
       background-position: center;
@@ -71,9 +109,30 @@
 <body>
   <!-- Top Section -->
   <div class="top-section">
-    <!-- Replace 'logo.png' with your actual logo file path -->
-    <img src="https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.49.50%20-%20A%20refined%20round%20logo%20design%20featuring%20the%20word%20'Bishnoi'%20in%20large%2C%20bold%20typography%20at%20the%20center.%20Surrounding%20the%20word%2C%20the%20phrase%20'Indian%20Student's%20O.webp" alt="Logo" class="logo">
-    <p>This site is built by students of GJUST for the help and guidance of students in various matters in the educational field.</p>
+    <!-- Logo Container -->
+    <div class="logo-container">
+      <img
+        src="https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.49.50%20-%20A%20refined%20round%20logo%20design%20featuring%20the%20word%20'Bishnoi'%20in%20large%2C%20bold%20typography%20at%20the%20center.%20Surrounding%20the%20word%2C%20the%20phrase%20'Indian%20Student's%20O.webp"
+        alt="Bishnoi Logo"
+        class="logo"
+      />
+    </div>
+
+    <!-- Centered Site Title and Tagline -->
+    <div class="site-title">
+      <h1>CLASSMATE</h1>
+      <p>A Project By Mechanical Engineers</p>
+    </div>
+
+    <!-- Expanded Intro Text (on the right side) -->
+    <div class="intro-text">
+      <p>
+        Here you will get regular materials for your study. For previous year
+        questions, notes, and other activities and reports regarding your
+        college, you can visit us. Here, we will guide your study like your
+        classmate.
+      </p>
+    </div>
   </div>
 
   <!-- First Separator Line -->
