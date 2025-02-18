@@ -21,7 +21,7 @@
       padding: 20px;
       display: flex;
       align-items: center;
-      justify-content: space-between; /* Distribute content on both sides */
+      justify-content: space-between;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
@@ -34,7 +34,7 @@
     .logo {
       width: 150px;
       height: 150px;
-      border-radius: 50%; /* Circular logo */
+      border-radius: 50%;
       object-fit: cover;
       object-position: center;
     }
@@ -42,7 +42,7 @@
     /* Main site title (CLASSMATE) in the center */
     .site-title {
       text-align: center;
-      flex: 1; /* Ensure title takes up remaining space */
+      flex: 1;
     }
 
     .site-title h1 {
@@ -53,16 +53,7 @@
 
     .site-title p {
       font-size: 14px;
-      color: #667eea; /* Blue color for the tagline */
-    }
-
-    /* Description text to the right of the logo */
-    .intro-text {
-      font-size: 18px;
-      line-height: 1.6;
-      font-weight: bold;
-      color: #444;
-      max-width: 600px;
+      color: #667eea;
     }
 
     /* Separator styling */
@@ -82,17 +73,22 @@
       justify-content: space-between;
       padding: 5px 0;
     }
-    .menu-item {
-      flex: 1;
+
+    /* Green box styling for options */
+    .menu-item-box {
+      border: 2px solid #667eea;
+      width: 160px;
+      height: 40px;
+      margin: 10px auto;
       text-align: center;
-      padding: 10px 0;
-      margin: 0 5px;
-      border: 1px solid transparent;
-      transition: border-color 0.3s ease;
+      line-height: 40px;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .menu-item:hover {
-      border-color: #667eea;
+
+    .menu-item-box:hover {
+      background-color: #667eea;
+      color: white;
     }
 
     /* Background Image Section styling */
@@ -124,21 +120,15 @@
       color: white;
     }
 
-    /* Menu items in separate boxes */
-    .menu-item-box {
-      border: 2px solid #667eea;
-      width: 200px;
-      height: 40px;
-      margin: 10px auto;
+    /* Text below Krishna image */
+    .intro-text {
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: bold;
+      color: #444;
+      max-width: 600px;
+      margin: 20px auto;
       text-align: center;
-      line-height: 40px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .menu-item-box:hover {
-      background-color: #667eea;
-      color: white;
     }
   </style>
 </head>
@@ -159,16 +149,6 @@
       <h1>CLASSMATE</h1>
       <p>A Project By Mechanical Engineers</p>
     </div>
-
-    <!-- Expanded Intro Text (on the right side) -->
-    <div class="intro-text">
-      <p>
-        Here you will get regular materials for your study. For previous year
-        questions, notes, and other activities and reports regarding your
-        college, you can visit us. Here, we will guide your study like your
-        classmate.
-      </p>
-    </div>
   </div>
 
   <!-- First Separator Line -->
@@ -186,6 +166,16 @@
 
   <!-- Background Image Section -->
   <div class="bg-image"></div>
+
+  <!-- Text below Krishna Image -->
+  <div class="intro-text">
+    <p>
+      Here you will get regular materials for your study. For previous year
+      questions, notes, and other activities and reports regarding your
+      college, you can visit us. Here, we will guide your study like your
+      classmate.
+    </p>
+  </div>
 
   <!-- Students Board Section -->
   <div class="students-board">
