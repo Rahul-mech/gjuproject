@@ -57,15 +57,6 @@
       color: #667eea;
     }
 
-    /* Description text to the right of the logo */
-    .intro-text {
-      font-size: 18px;
-      line-height: 1.6;
-      font-weight: bold;
-      color: #444;
-      max-width: 600px;
-    }
-
     /* Separator styling */
     .separator {
       width: 80%;
@@ -109,6 +100,31 @@
       background-position: center;
       background-repeat: no-repeat;
     }
+
+    /* Centered content below Krishna image */
+    .content-section {
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Student's Board Button */
+    .students-board-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      border: 2px solid #007bff;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .students-board-btn:hover {
+      background: #28a745;
+      border-color: #28a745;
+    }
   </style>
 </head>
 <body>
@@ -122,14 +138,6 @@
     <!-- Centered Site Title and Tagline -->
     <div class="site-title">
       <h1>CLASSMATE</h1>
-      <p>A Project By Mechanical Engineers</p>
-    </div>
-
-    <!-- Expanded Intro Text (on the right side) -->
-    <div class="intro-text">
-      <p>
-        Here you will get regular materials for your study. For previous year questions, notes, and other activities and reports regarding your college, you can visit us. Here, we will guide your study like your classmate.
-      </p>
     </div>
   </div>
 
@@ -148,5 +156,14 @@
 
   <!-- Background Image Section -->
   <div class="bg-image"></div>
+
+  <!-- Content Section Below Krishna Image -->
+  <div class="content-section">
+    <p>
+      A Project By Mechanical Engineers<br>
+      Here you will get regular materials for your study. For previous year questions, notes, and other activities and reports regarding your college, you can visit us. Here, we will guide your study like your classmate.
+    </p>
+    <a href="students_board.html" class="students-board-btn">Student's Board</a>
+  </div>
 </body>
 </html>
