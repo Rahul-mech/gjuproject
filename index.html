@@ -104,6 +104,70 @@
       background-position: center;
       background-repeat: no-repeat;
     }
+
+    /* Media Queries for smaller devices */
+    @media only screen and (max-width: 768px) {
+      .top-section {
+        flex-direction: column; /* Stack logo, title, and text vertically */
+        align-items: center; /* Center items */
+        padding: 15px;
+      }
+
+      .logo {
+        width: 120px;
+        height: 120px;
+      }
+
+      .site-title h1 {
+        font-size: 30px;
+      }
+
+      .site-title p {
+        font-size: 12px;
+      }
+
+      .intro-text {
+        font-size: 16px;
+        text-align: center;
+        max-width: 90%; /* Allow more room on smaller screens */
+      }
+
+      .menu {
+        flex-direction: column; /* Stack menu items vertically */
+        width: 90%; /* Increase width on mobile */
+        padding: 10px 0;
+      }
+
+      .menu-item {
+        flex: 0;
+        text-align: center;
+        padding: 12px 0;
+        margin: 5px 0;
+      }
+
+      .separator {
+        width: 90%;
+        max-width: 100%;
+      }
+
+      .bg-image {
+        height: 400px; /* Reduce height of background image on mobile */
+      }
+    }
+
+    @media only screen and (max-width: 480px) {
+      .site-title h1 {
+        font-size: 26px;
+      }
+
+      .intro-text {
+        font-size: 14px;
+      }
+
+      .bg-image {
+        height: 300px; /* Further reduce the height on very small screens */
+      }
+    }
   </style>
 </head>
 <body>
