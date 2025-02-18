@@ -23,13 +23,25 @@
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    /* Green faded tube around the first section */
+    .top-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 20px;
+      right: 20px;
+      height: 5px;
+      background: rgba(0, 128, 0, 0.3); /* Faded green */
     }
 
     /* Logo container */
     .logo-container {
-      flex: 1 1 150px; /* Allow flexibility for the logo to adjust */
-      text-align: left; /* Align logo to the left */
+      flex: 1 1 150px;
+      text-align: left;
     }
 
     /* Logo styling */
@@ -43,8 +55,8 @@
 
     /* Main site title (CLASSMATE) in the center */
     .site-title {
-      text-align: right; /* Align text to the right */
-      margin-right: 10px; /* Distance from right side */
+      text-align: right;
+      margin-right: 10px;
       flex: 1;
     }
 
