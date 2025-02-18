@@ -81,7 +81,7 @@
       color: #667eea; /* Blue color for the tagline */
     }
 
-    /* Second Section (after Krishna Image) */
+    /* First Section Text below the Image */
     .intro-text {
       font-size: 18px;
       line-height: 1.6;
@@ -131,6 +131,18 @@
       background-repeat: no-repeat;
     }
 
+    /* Second Section for the text below Krishna Image */
+    .krishna-text {
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #444;
+      background: #fff;
+      margin-top: 20px;
+    }
+
     /* Responsive for mobile */
     @media (max-width: 768px) {
       .top-section {
@@ -166,6 +178,10 @@
         flex: none;
         width: auto;
       }
+
+      .krishna-text {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
@@ -194,4 +210,16 @@
   <!-- Menu Section (Previous Year, Extra Resources, Your Syllabus) -->
   <div class="menu">
     <div class="menu-item" onclick="window.location.href='previous_year_questions.html'">Previous Year</div>
-    <div class="menu-item" onclick="window.location.href='extra_resources.html'">Extra Resources</
+    <div class="menu-item" onclick="window.location.href='extra_resources.html'">Extra Resources</div>
+    <div class="menu-item" onclick="window.location.href='syllabus.html'">Your Syllabus</div>
+  </div>
+
+  <!-- Krishna Image Section -->
+  <div class="bg-image"></div>
+
+  <!-- Krishna Text Section -->
+  <div class="krishna-text">
+    <p>Here is some text that explains the image above, something related to the Krishna Bhagavad Gita.</p>
+  </div>
+</body>
+</html>
