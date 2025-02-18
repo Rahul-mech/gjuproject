@@ -23,11 +23,14 @@
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      flex-wrap: wrap; /* Allow items to wrap on smaller screens */
     }
 
     /* Logo container */
     .logo-container {
-      margin-right: 20px; /* Space between logo and text */
+      margin-right: 20px;
+      flex: 1 1 150px; /* Allow flexibility for the logo to adjust */
+      text-align: center;
     }
 
     /* Logo styling */
@@ -42,7 +45,7 @@
     /* Main site title (CLASSMATE) in the center */
     .site-title {
       text-align: center;
-      flex: 1; /* Ensure title takes up remaining space */
+      flex: 2;
     }
 
     .site-title h1 {
@@ -63,6 +66,8 @@
       font-weight: bold;
       color: #444;
       max-width: 600px;
+      flex: 3;
+      text-align: center;
     }
 
     /* Separator styling */
@@ -79,7 +84,7 @@
       max-width: 900px;
       margin: 0 auto;
       display: flex;
-      justify-content: space-between; /* This will place the items in a row */
+      justify-content: space-between;
       padding: 5px 0;
     }
     .menu-item {
@@ -108,23 +113,14 @@
     /* Media Queries for smaller devices */
     @media only screen and (max-width: 768px) {
       .top-section {
-        flex-direction: column; /* Stack logo, title, and text vertically */
-        align-items: center; /* Center items */
+        flex-wrap: wrap; /* Items will wrap if needed */
         padding: 15px;
+        justify-content: center; /* Center the content */
       }
 
-      .logo-container {
-        order: 1; /* Ensure the logo stays on top */
-      }
-
-      .site-title {
-        order: 2; /* Site title stays in the middle */
-      }
-
-      .intro-text {
-        order: 3; /* Description text goes to the bottom */
+      .logo-container, .site-title, .intro-text {
+        flex: 1 1 100%; /* Allow each item to take up full width */
         text-align: center;
-        max-width: 90%; /* Allow more room on smaller screens */
       }
 
       .logo {
@@ -140,8 +136,13 @@
         font-size: 12px;
       }
 
+      .intro-text {
+        font-size: 16px;
+        max-width: 90%; /* Allow more room on smaller screens */
+      }
+
       .menu {
-        flex-direction: row; /* Keep items in row */
+        flex-direction: row; /* Ensure options are in a row */
         width: 100%;
         justify-content: space-evenly; /* Evenly space the items */
         padding: 10px 0;
@@ -159,25 +160,8 @@
         width: 90%;
         max-width: 100%;
       }
-
-      .bg-image {
-        height: 400px; /* Reduce height of background image on mobile */
-      }
     }
 
-    @media only screen and (max-width: 480px) {
-      .site-title h1 {
-        font-size: 26px;
-      }
-
-      .intro-text {
-        font-size: 14px;
-      }
-
-      .bg-image {
-        height: 300px; /* Further reduce the height on very small screens */
-      }
-    }
   </style>
 </head>
 <body>
