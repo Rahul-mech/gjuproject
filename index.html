@@ -21,70 +21,74 @@
       padding: 20px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-between; 
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: relative;
+      border-bottom: 3px solid #667eea; /* Blue line on top of section */
+    }
+
+    /* Green rectangular boundary for top section */
+    .top-section::before {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: rgba(0, 255, 0, 0.3); /* Faded green line */
     }
 
     /* Logo container */
     .logo-container {
-      margin-right: 20px;
+      flex: 1;
     }
 
     /* Logo styling */
     .logo {
-      width: 120px; /* Adjusted size */
+      width: 120px;
       height: 120px;
-      border-radius: 50%;
+      border-radius: 50%; 
       object-fit: cover;
-      object-position: center;
     }
 
     /* Main site title (CLASSMATE) in the center */
     .site-title {
       text-align: center;
       flex: 1;
-    }
-
-    .site-title h1 {
-      font-size: 36px;
+      font-size: 28px;
       font-weight: bold;
-      color: #444;
     }
 
     .site-title p {
-      font-size: 14px;
-      color: #667eea;
+      font-size: 12px;
+      color: #667eea; 
     }
 
     /* Description text to the right of the logo */
     .intro-text {
-      font-size: 18px;
-      line-height: 1.6;
+      font-size: 16px;
       font-weight: bold;
-      color: #444;
-      max-width: 600px;
+      max-width: 500px;
+      text-align: right;
     }
 
     /* Separator styling */
     .separator {
-      width: 80%;
-      max-width: 900px;
+      width: 100%;
       margin: 10px auto;
-      border-top: 4px solid #667eea;
+      border-top: 2px solid #667eea;
     }
 
     /* Menu Section styling */
     .menu {
-      width: 80%;
-      max-width: 900px;
-      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       padding: 5px 0;
+      width: 100%;
     }
     .menu-item {
-      flex: 1;
       text-align: center;
+      flex: 1;
       padding: 10px 0;
       margin: 0 5px;
       border: 1px solid transparent;
@@ -105,42 +109,56 @@
       background-repeat: no-repeat;
     }
 
-    /* Student's Board Button */
+    /* Student's Board Hover Effect */
     .students-board {
-      display: inline-block;
       padding: 10px 20px;
+      text-align: center;
       background-color: #4CAF50;
       color: white;
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      border: 2px solid transparent;
       border-radius: 5px;
+      width: 200px;
+      margin: 10px auto;
+      transition: all 0.5s ease;
       cursor: pointer;
-      transition: all 0.4s ease;
     }
 
     .students-board:hover {
       background-color: #45a049;
-      border-color: #45a049;
-      background-image: linear-gradient(to right, #45a049 50%, transparent 50%);
-      background-size: 200% auto;
-      background-position: right center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Section with the green tube */
-    .green-tube {
-      background-color: #D4EDDA; /* Faded green */
-      border-top: 5px solid #28A745; /* Green border at the top */
-      margin: 10px 0;
-    }
+    /* Mobile Responsiveness */
+    @media screen and (max-width: 768px) {
+      .top-section {
+        flex-direction: column;
+        text-align: center;
+      }
 
+      .menu {
+        flex-direction: column;
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+
+      .site-title {
+        font-size: 24px;
+      }
+
+      .intro-text {
+        text-align: center;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+    }
   </style>
 </head>
 <body>
-
-  <!-- Top Section with the logo and CLASSMATE -->
+  <!-- Top Section -->
   <div class="top-section">
+    <!-- Logo Container -->
     <div class="logo-container">
       <img
         src="https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.49.50%20-%20A%20refined%20round%20logo%20design%20featuring%20the%20word%20'Bishnoi'%20in%20large%2C%20bold%20typography%20at%20the%20center.%20Surrounding%20the%20word%2C%20the%20phrase%20'Indian%20Student's%20O.webp"
@@ -149,16 +167,21 @@
       />
     </div>
 
+    <!-- Centered Site Title and Tagline -->
     <div class="site-title">
       <h1>CLASSMATE</h1>
       <p>A Project By Mechanical Engineers</p>
     </div>
+
+    <!-- Expanded Intro Text (on the right side) -->
+    <div class="intro-text">
+      <p>
+        This site is built by students of GJUST for the help and guidance of students in various matters in the educational field.
+      </p>
+    </div>
   </div>
 
-  <!-- Green Tube Section -->
-  <div class="green-tube"></div>
-
-  <!-- Separator between sections -->
+  <!-- First Separator Line -->
   <div class="separator"></div>
 
   <!-- Menu Section -->
@@ -168,20 +191,13 @@
     <div class="menu-item" onclick="window.location.href='your_syllabus.html'">Your Syllabus</div>
   </div>
 
+  <!-- Second Separator Line -->
+  <div class="separator"></div>
+
   <!-- Background Image Section -->
   <div class="bg-image"></div>
 
-  <!-- Text below image -->
-  <div class="intro-text">
-    <p>
-      This site is built by students of GJUST for the help and guidance of students in various matters in the educational field.
-    </p>
-  </div>
-
-  <!-- Student's Board Option -->
-  <div class="students-board">
-    Student's Board
-  </div>
-
+  <!-- Student's Board Section -->
+  <div class="students-board" onclick="window.location.href='students_board.html'">Student's Board</div>
 </body>
 </html>
