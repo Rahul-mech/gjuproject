@@ -75,11 +75,11 @@
 
     /* Menu Section styling */
     .menu {
-      width: 80%;
-      max-width: 800px; /* Reduced width for better alignment */
+      width: 100%;
+      max-width: 900px;
       margin: 0 auto;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* This will place the items in a row */
       padding: 5px 0;
     }
     .menu-item {
@@ -133,16 +133,18 @@
       }
 
       .menu {
-        flex-direction: column; /* Stack menu items vertically */
-        width: 90%; /* Increase width on mobile */
+        flex-direction: row; /* Keep items in row */
+        width: 100%;
+        justify-content: space-evenly; /* Evenly space the items */
         padding: 10px 0;
       }
 
       .menu-item {
-        flex: 0;
+        flex: 1;
         text-align: center;
         padding: 12px 0;
-        margin: 5px 0;
+        margin: 5px;
+        width: 30%; /* Make each item a bit more compact */
       }
 
       .separator {
