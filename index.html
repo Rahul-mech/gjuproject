@@ -27,15 +27,25 @@
       position: relative;
     }
 
-    /* Green faded tube around the first section */
-    .top-section::before {
+    /* Green faded tube around the first section (above and below) */
+    .top-section::before,
+    .top-section::after {
       content: "";
       position: absolute;
-      top: 0;
       left: 20px;
       right: 20px;
       height: 5px;
-      background: rgba(0, 128, 0, 0.3); /* Faded green */
+      background: rgba(0, 128, 0, 0.5); /* More vibrant green */
+    }
+
+    /* Top green line (above the logo and classmate) */
+    .top-section::before {
+      top: 0;
+    }
+
+    /* Bottom green line (below the logo and classmate) */
+    .top-section::after {
+      bottom: 0;
     }
 
     /* Logo container */
@@ -85,8 +95,30 @@
     .separator {
       width: 80%;
       max-width: 900px;
-      margin: 7px auto; /* Reduced margin by 30% */
+      margin: 5px auto; /* Reduced margin by 30% */
       border-top: 4px solid #667eea;
+    }
+
+    /* Menu Section styling */
+    .menu {
+      width: 80%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+    .menu-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      margin: 0 5px;
+      border: 1px solid transparent;
+      transition: border-color 0.3s ease;
+      cursor: pointer;
+    }
+    .menu-item:hover {
+      border-color: #667eea;
     }
 
     /* Background Image Section styling */
@@ -97,6 +129,49 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+    }
+
+    /* Responsive for mobile */
+    @media (max-width: 768px) {
+      .top-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .site-title {
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .top-section::before,
+      .top-section::after {
+        left: 0;
+        right: 0;
+      }
+
+      .logo-container {
+        text-align: center;
+      }
+
+      .site-title h1 {
+        font-size: 28px;
+      }
+
+      .site-title p {
+        font-size: 12px;
+      }
+
+      /* Menu Section adjustments for mobile */
+      .menu {
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .menu-item {
+        margin: 5px 0;
+        flex: none;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -120,6 +195,16 @@
   </div>
 
   <!-- First Separator Line -->
+  <div class="separator"></div>
+
+  <!-- Menu Section (Previous Year, Extra Resources, Your Syllabus) -->
+  <div class="menu">
+    <div class="menu-item" onclick="window.location.href='previous_year_questions.html'">Previous Year</div>
+    <div class="menu-item" onclick="window.location.href='extra_resources.html'">Extra Resources</div>
+    <div class="menu-item" onclick="window.location.href='your_syllabus.html'">Your Syllabus</div>
+  </div>
+
+  <!-- Second Separator Line -->
   <div class="separator"></div>
 
   <!-- Background Image Section (Krishna) -->
