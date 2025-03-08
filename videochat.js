@@ -17,18 +17,15 @@ document.getElementById("startCall").addEventListener("click", async function ()
         peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 ws.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
-                console.log("Sending ICE candidate:", event.candidate);
             }
         };
 
         peerConnection.ontrack = (event) => {
-            console.log("Received remote stream:", event.streams[0]);
-            document.getElementById("remoteVideo").srcObject = event.streams[0];
+            document.getElementById("remoteVideo").srcObject = event.streams[0]; // Show opponent's camera
         };
 
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
-        console.log("Sending offer:", offer);
         ws.send(JSON.stringify({ type: "offer", offer }));
 
     } catch (error) {
@@ -38,8 +35,7 @@ document.getElementById("startCall").addEventListener("click", async function ()
 });
 
 ws.onmessage = async (message) => {
-    console.log("Received message:", message.data);
-    const data = JSON.parse(message.data);
+    const data = JSON.parse(message);
 
     if (data.type === "offer") {
         peerConnection = new RTCPeerConnection(config);
@@ -48,19 +44,16 @@ ws.onmessage = async (message) => {
         peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 ws.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
-                console.log("Sending ICE candidate:", event.candidate);
             }
         };
 
         peerConnection.ontrack = (event) => {
-            console.log("Received remote stream:", event.streams[0]);
-            document.getElementById("remoteVideo").srcObject = event.streams[0];
+            document.getElementById("remoteVideo").srcObject = event.streams[0]; // Show opponent's camera
         };
 
         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
-        console.log("Sending answer:", answer);
         ws.send(JSON.stringify({ type: "answer", answer }));
     }
 
@@ -70,7 +63,6 @@ ws.onmessage = async (message) => {
 
     if (data.type === "ice" && peerConnection) {
         await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
-        console.log("Adding ICE candidate:", data.candidate);
     }
 };
 
@@ -79,4 +71,7 @@ document.getElementById("endCall").addEventListener("click", function () {
         peerConnection.close();
     }
     localStream.getTracks().forEach(track => track.stop());
-    document.getElementById(
+    document.getElementById("localVideo").srcObject = null;
+    document.getElementById("remoteVideo").srcObject = null;
+    alert("Call ended.");
+});
