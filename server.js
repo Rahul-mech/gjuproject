@@ -6,38 +6,33 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// To track waiting users and their WebSocket connections
-let waitingUsers = [];
+let users = [];
 
 wss.on("connection", (ws) => {
     console.log("New client connected!");
+    users.push(ws);  // Add the user to the queue
 
-    // Add the new user to the waiting list
-    waitingUsers.push(ws);
+    if (users.length === 2) {
+        const user1 = users.shift(); // Get the first user
+        const user2 = users.shift(); // Get the second user
 
-    // Pair users when there are at least two users waiting
-    if (waitingUsers.length >= 2) {
-        const user1 = waitingUsers.shift(); // Get first user
-        const user2 = waitingUsers.shift(); // Get second user
+        // Pair the users together by sending each other a signal
+        user1.send(JSON.stringify({ type: "start_call", message: "You are paired with someone!" }));
+        user2.send(JSON.stringify({ type: "start_call", message: "You are paired with someone!" }));
 
-        // Send a pair message to both users
-        user1.send(JSON.stringify({ type: "pair", id: user2._socket.remoteAddress }));
-        user2.send(JSON.stringify({ type: "pair", id: user1._socket.remoteAddress }));
-
-        // Relay offer/answer/ICE candidates between users
+        // Handle the message flow between the two
         user1.on("message", (message) => {
-            user2.send(message); // Relay message from user1 to user2
+            user2.send(message); // Send user1's message to user2
         });
-
         user2.on("message", (message) => {
-            user1.send(message); // Relay message from user2 to user1
+            user1.send(message); // Send user2's message to user1
         });
     }
 
     ws.on("close", () => {
         console.log("Client disconnected.");
-        // Remove user from the waiting list
-        waitingUsers = waitingUsers.filter(user => user !== ws);
+        // Clean up the user queue on disconnect
+        users = users.filter((user) => user !== ws);
     });
 });
 
