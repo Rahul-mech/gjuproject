@@ -6,8 +6,11 @@ const config = {
     iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
 };
 
+let partnerId = null; // To store the partner's id
+
 document.getElementById("startCall").addEventListener("click", async function () {
     try {
+        // Get video stream
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         document.getElementById("localVideo").srcObject = localStream;
 
@@ -21,7 +24,7 @@ document.getElementById("startCall").addEventListener("click", async function ()
         };
 
         peerConnection.ontrack = (event) => {
-            document.getElementById("remoteVideo").srcObject = event.streams[0]; // Show the opponent's video
+            document.getElementById("remoteVideo").srcObject = event.streams[0];
         };
 
         const offer = await peerConnection.createOffer();
@@ -30,16 +33,16 @@ document.getElementById("startCall").addEventListener("click", async function ()
 
     } catch (error) {
         console.error("Error accessing camera or microphone:", error);
-        alert("Please allow access to your camera and microphone to start the call.");
+        alert("Please allow access to your camera and microphone.");
     }
 });
 
 ws.onmessage = async (message) => {
     const data = JSON.parse(message.data);
 
-    if (data.type === "start_call") {
-        // Notify user that they've been paired and can start the call
-        alert(data.message);
+    if (data.type === "pairing") {
+        partnerId = data.partner; // Store the partner's id when paired
+        alert(`You are paired with user ${partnerId}. Starting the video call.`);
     }
 
     if (data.type === "offer") {
@@ -53,7 +56,7 @@ ws.onmessage = async (message) => {
         };
 
         peerConnection.ontrack = (event) => {
-            document.getElementById("remoteVideo").srcObject = event.streams[0]; // Show opponent's video
+            document.getElementById("remoteVideo").srcObject = event.streams[0];
         };
 
         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
@@ -69,7 +72,7 @@ ws.onmessage = async (message) => {
     if (data.type === "ice" && peerConnection) {
         await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
     }
-};
+});
 
 document.getElementById("endCall").addEventListener("click", function () {
     if (peerConnection) {
