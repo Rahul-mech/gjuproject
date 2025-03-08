@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discuss with Other Students</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      padding: 50px;
+    }
+    .chat-option {
+      display: inline-block;
+      width: 200px;
+      padding: 20px;
+      margin: 20px;
+      background-color: #007bff;
+      color: white;
+      font-size: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s;
+    }
+    .chat-option:hover {
+      background-color: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <h1>Discuss Anonymously with Other Students</h1>
+  <p>Select an option to start a random chat</p>
+  
+  <button class="chat-option" onclick="startVoiceChat()">🎙 Voice Chat</button>
+  <button class="chat-option" onclick="startVideoChat()">📹 Video Chat</button>
+  
+  <script>
+    function startVoiceChat() {
+      window.location.href = 'voicechat.html';
+    }
+    function startVideoChat() {
+      window.location.href = 'videochat.html';
+    }
+  </script>
+</body>
+</html>
 
