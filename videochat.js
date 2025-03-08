@@ -1,3 +1,4 @@
+console.log("Videochat.js is loaded!");
 document.getElementById("startCall").addEventListener("click", async function () {
     try {
         // Request permission for both camera and microphone
