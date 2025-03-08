@@ -1,18 +1,19 @@
-document.getElementById("startCall").addEventListener("click", async function () {
-    try {
-        // Request permission for microphone access
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Chat</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <h1>Voice Chat</h1>
 
-        console.log("Microphone access granted:", stream);
+  <!-- Call buttons -->
+  <button id="startCall">Start Call</button>
+  <button id="endCall">End Call</button>
 
-        // You can now process the audio stream (e.g., send it over WebRTC)
-    } catch (error) {
-        console.error("Error accessing microphone:", error);
-        alert("Please allow access to your microphone to start the call.");
-    }
-});
-
-document.getElementById("endCall").addEventListener("click", function () {
-    console.log("Call ended.");
-    alert("Call ended.");
-});
+  <!-- Link the JavaScript file -->
+  <script src="scripts/voicechat.js"></script>
+</body>
+</html>
