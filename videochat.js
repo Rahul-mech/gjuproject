@@ -1,16 +1,26 @@
 const ws = new WebSocket("wss://gjuproject.onrender.com"); // WebSocket connection
 
+// Log for WebSocket events
+ws.onopen = function () {
+    console.log("WebSocket connection established.");
+};
+
+ws.onerror = function (error) {
+    console.log("WebSocket error: ", error);
+};
+
+ws.onclose = function () {
+    console.log("WebSocket connection closed.");
+};
+
 let localStream;
 let peerConnection;
 const config = {
     iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
 };
 
-let partnerId = null; // To store the partner's id
-
 document.getElementById("startCall").addEventListener("click", async function () {
     try {
-        // Get video stream
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         document.getElementById("localVideo").srcObject = localStream;
 
@@ -33,17 +43,13 @@ document.getElementById("startCall").addEventListener("click", async function ()
 
     } catch (error) {
         console.error("Error accessing camera or microphone:", error);
-        alert("Please allow access to your camera and microphone.");
+        alert("Please allow access to your camera and microphone to start the call.");
     }
 });
 
 ws.onmessage = async (message) => {
+    console.log("Received message: ", message.data);
     const data = JSON.parse(message.data);
-
-    if (data.type === "pairing") {
-        partnerId = data.partner; // Store the partner's id when paired
-        alert(`You are paired with user ${partnerId}. Starting the video call.`);
-    }
 
     if (data.type === "offer") {
         peerConnection = new RTCPeerConnection(config);
@@ -72,7 +78,7 @@ ws.onmessage = async (message) => {
     if (data.type === "ice" && peerConnection) {
         await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
     }
-});
+};
 
 document.getElementById("endCall").addEventListener("click", function () {
     if (peerConnection) {
