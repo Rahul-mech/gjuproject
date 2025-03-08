@@ -7,6 +7,7 @@ document.getElementById("startCall").addEventListener("click", async function ()
         // Show local video stream
         const localVideo = document.getElementById("localVideo");
         localVideo.srcObject = stream;
+        localVideo.play(); // Ensure video starts playing
 
     } catch (error) {
         console.error("Error accessing camera or microphone:", error);
@@ -25,4 +26,3 @@ document.getElementById("endCall").addEventListener("click", function () {
         localVideo.srcObject = null;
     }
 });
-
