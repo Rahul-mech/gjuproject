@@ -1,28 +1,23 @@
-document.getElementById("startCall").addEventListener("click", async function () {
-    try {
-        // Request permission for both video and audio
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Chat</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <h1>Video Chat</h1>
 
-        console.log("Camera & Microphone access granted:", stream);
+  <!-- Video elements -->
+  <video id="localVideo" autoplay playsinline></video>
+  <video id="remoteVideo" autoplay playsinline></video>
 
-        // Set local video stream
-        const localVideo = document.getElementById("localVideo");
-        localVideo.srcObject = stream;
+  <!-- Call buttons -->
+  <button id="startCall">Start Call</button>
+  <button id="endCall">End Call</button>
 
-    } catch (error) {
-        console.error("Error accessing camera or microphone:", error);
-        alert("Please allow access to your camera and microphone to start the call.");
-    }
-});
-
-document.getElementById("endCall").addEventListener("click", function () {
-    console.log("Call ended.");
-    alert("Call ended.");
-    
-    // Stop the video stream
-    const localVideo = document.getElementById("localVideo");
-    if (localVideo.srcObject) {
-        localVideo.srcObject.getTracks().forEach(track => track.stop());
-        localVideo.srcObject = null;
-    }
-});
+  <!-- Link the JavaScript file -->
+  <script src="scripts/videochat.js"></script>
+</body>
+</html>
