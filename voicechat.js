@@ -18,6 +18,7 @@ document.getElementById("startCall").addEventListener("click", async function ()
         peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 ws.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
+                console.log("Sending ICE candidate:", event.candidate);
             }
         };
 
@@ -29,6 +30,7 @@ document.getElementById("startCall").addEventListener("click", async function ()
 
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
+        console.log("Sending offer:", offer);
         ws.send(JSON.stringify({ type: "offer", offer }));
 
     } catch (error) {
@@ -38,6 +40,7 @@ document.getElementById("startCall").addEventListener("click", async function ()
 });
 
 ws.onmessage = async (message) => {
+    console.log("Received message:", message.data);
     const data = JSON.parse(message.data);
 
     if (data.type === "offer") {
@@ -47,6 +50,7 @@ ws.onmessage = async (message) => {
         peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 ws.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
+                console.log("Sending ICE candidate:", event.candidate);
             }
         };
 
@@ -59,6 +63,7 @@ ws.onmessage = async (message) => {
         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
+        console.log("Sending answer:", answer);
         ws.send(JSON.stringify({ type: "answer", answer }));
     }
 
@@ -68,6 +73,7 @@ ws.onmessage = async (message) => {
 
     if (data.type === "ice" && peerConnection) {
         await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+        console.log("Adding ICE candidate:", data.candidate);
     }
 };
 
