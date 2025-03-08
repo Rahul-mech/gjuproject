@@ -1,14 +1,32 @@
-console.log("Videochat.js is loaded!");
+const ws = new WebSocket("wss://gjuproject.onrender.com"); // WebSocket connection
+
+let localStream;
+let peerConnection;
+const config = {
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+};
+
 document.getElementById("startCall").addEventListener("click", async function () {
     try {
-        // Request permission for both camera and microphone
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        console.log("Camera and microphone access granted:", stream);
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById("localVideo").srcObject = localStream;
 
-        // Show local video stream
-        const localVideo = document.getElementById("localVideo");
-        localVideo.srcObject = stream;
-        localVideo.play(); // Ensure video starts playing
+        peerConnection = new RTCPeerConnection(config);
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                ws.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
+            }
+        };
+
+        peerConnection.ontrack = (event) => {
+            document.getElementById("remoteVideo").srcObject = event.streams[0];
+        };
+
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        ws.send(JSON.stringify({ type: "offer", offer }));
 
     } catch (error) {
         console.error("Error accessing camera or microphone:", error);
@@ -16,14 +34,44 @@ document.getElementById("startCall").addEventListener("click", async function ()
     }
 });
 
-document.getElementById("endCall").addEventListener("click", function () {
-    console.log("Call ended.");
-    alert("Call ended.");
+ws.onmessage = async (message) => {
+    const data = JSON.parse(message.data);
 
-    // Stop the video stream
-    const localVideo = document.getElementById("localVideo");
-    if (localVideo.srcObject) {
-        localVideo.srcObject.getTracks().forEach(track => track.stop());
-        localVideo.srcObject = null;
+    if (data.type === "offer") {
+        peerConnection = new RTCPeerConnection(config);
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                ws.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
+            }
+        };
+
+        peerConnection.ontrack = (event) => {
+            document.getElementById("remoteVideo").srcObject = event.streams[0];
+        };
+
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        ws.send(JSON.stringify({ type: "answer", answer }));
     }
+
+    if (data.type === "answer") {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+    }
+
+    if (data.type === "ice" && peerConnection) {
+        await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+    }
+};
+
+document.getElementById("endCall").addEventListener("click", function () {
+    if (peerConnection) {
+        peerConnection.close();
+    }
+    localStream.getTracks().forEach(track => track.stop());
+    document.getElementById("localVideo").srcObject = null;
+    document.getElementById("remoteVideo").srcObject = null;
+    alert("Call ended.");
 });
