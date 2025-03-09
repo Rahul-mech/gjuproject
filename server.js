@@ -1,23 +1,3 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const path = require('path');
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-
-// Serve static files from the root directory
-app.use(express.static(__dirname));
-
-// Add a root route
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Store users waiting for a match
-let waitingUsers = [];
-
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -54,10 +34,4 @@ io.on('connection', (socket) => {
     console.log('A user disconnected:', socket.id);
     waitingUsers = waitingUsers.filter(user => user !== socket.id);
   });
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
 });
