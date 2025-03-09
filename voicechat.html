@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voice Chat</title>
-  <link rel="stylesheet" href="styles/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Chat</title>
 </head>
 <body>
-  <h1>Voice Chat</h1>
+    <h2>Anonymous Voice Chat</h2>
+    
+    <button id="startCall">Start Call</button>
+    <button id="endCall">End Call</button>
 
-  <!-- Call buttons -->
-  <button id="startCall">Start Call</button>
-  <button id="endCall">End Call</button>
+    <!-- This is where remote audio will play -->
+    <audio id="remoteAudio" autoplay></audio>
 
-  <!-- Link the JavaScript file -->
-  <script src="voicechat.js"></script>
+    <script src="voicechat.js"></script>
 </body>
 </html>
