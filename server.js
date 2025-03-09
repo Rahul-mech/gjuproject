@@ -1,14 +1,14 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-const path = require('path');
+const path = require('path'); // Add this line
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 // Serve static files from the root directory
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname))); // Add this line
 
 // Socket.IO logic for video chat
 let waitingUsers = [];
