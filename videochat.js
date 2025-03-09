@@ -29,7 +29,11 @@ document.getElementById("startCall").addEventListener("click", async function ()
     console.log("Start Call button clicked");
     try {
         // Request camera and microphone permissions
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localStream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: "user" }, 
+            audio: true 
+        });
+
         console.log("Camera and microphone access granted");
 
         // Display local video
@@ -65,11 +69,7 @@ document.getElementById("startCall").addEventListener("click", async function ()
 
 // Handle incoming WebSocket messages (for answering, ICE candidates)
 ws.onmessage = async (message) => {
-    const data = JSON.parse(message.data);
-    console.log("Received message: ", data);
-
-    if (data.type === "offer") {
-        // When another user sends an offer
+    if (!peerConnection) {
         peerConnection = new RTCPeerConnection(config);
         localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
@@ -80,10 +80,16 @@ ws.onmessage = async (message) => {
         };
 
         peerConnection.ontrack = (event) => {
-            remoteVideo.srcObject = event.streams[0]; // Show the other user's video
+            console.log("Received remote track");
+            remoteVideo.srcObject = event.streams[0];
         };
+    }
 
-        // Set the remote offer and send an answer
+    const data = JSON.parse(message.data);
+    console.log("Received message: ", data);
+
+    if (data.type === "offer") {
+        // When another user sends an offer
         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
@@ -95,19 +101,21 @@ ws.onmessage = async (message) => {
         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
     }
 
-    if (data.type === "ice" && peerConnection) {
+    if (data.type === "ice") {
         // When ICE candidates are received, add them to the peer connection
         await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
     }
-});
+};
 
 // End Call - User clicked the "End Call" button
 document.getElementById("endCall").addEventListener("click", function () {
     if (peerConnection) {
         peerConnection.close();
+        peerConnection = null;
     }
     if (localStream) {
         localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
     }
     localVideo.srcObject = null;
     remoteVideo.srcObject = null;
