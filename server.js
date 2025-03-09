@@ -6,6 +6,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Add a root route
+app.get('/', (req, res) => {
+  res.send('Classmate Backend is running!');
+});
+
 // Store users waiting for a match
 let waitingUsers = [];
 
