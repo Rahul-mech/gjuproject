@@ -1,18 +1,3 @@
-const socket = new WebSocket("wss://gjuproject.onrender.com");
-
-socket.onopen = () => {
-    console.log("Connected to WebSocket server");
-};
-
-socket.onmessage = (event) => {
-    console.log("Message received:", event.data);
-    const data = JSON.parse(event.data);
-
-    if (data.type === "pairing") {
-        console.log("Paired with another user.");
-    }
-};
-
 const ws = new WebSocket("wss://gjuproject.onrender.com"); // WebSocket connection
 
 // Log WebSocket events for debugging
@@ -28,10 +13,12 @@ ws.onclose = function () {
     console.log("WebSocket connection closed.");
 };
 
+// Get video elements
+let localVideo = document.getElementById("localVideo");
+let remoteVideo = document.getElementById("remoteVideo");
+
 let localStream;
 let peerConnection;
-let remoteVideo = document.getElementById("remoteVideo"); // This is where remote video will be shown
-let localVideo = document.getElementById("localVideo"); // Local user video
 
 const config = {
     iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
@@ -39,33 +26,40 @@ const config = {
 
 // Start Call - User clicked the "Start Call" button
 document.getElementById("startCall").addEventListener("click", async function () {
+    console.log("Start Call button clicked");
     try {
+        // Request camera and microphone permissions
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        localVideo.srcObject = localStream; // Show local video in the browser
+        console.log("Camera and microphone access granted");
 
+        // Display local video
+        localVideo.srcObject = localStream;
+
+        // Create WebRTC peer connection
         peerConnection = new RTCPeerConnection(config);
         localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-        // ICE candidate handling
         peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
+                console.log("Sending ICE candidate:", event.candidate);
                 ws.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
             }
         };
 
-        // When remote track is received
         peerConnection.ontrack = (event) => {
-            remoteVideo.srcObject = event.streams[0]; // Show remote user's video
+            console.log("Received remote track");
+            remoteVideo.srcObject = event.streams[0];
         };
 
-        // Create offer for the other user
+        // Create offer and send to the WebSocket server
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
+        console.log("Sending offer:", offer);
         ws.send(JSON.stringify({ type: "offer", offer }));
 
     } catch (error) {
         console.error("Error accessing camera or microphone:", error);
-        alert("Please allow access to your camera and microphone to start the call.");
+        alert("Please allow access to your camera and microphone.");
     }
 });
 
@@ -112,7 +106,9 @@ document.getElementById("endCall").addEventListener("click", function () {
     if (peerConnection) {
         peerConnection.close();
     }
-    localStream.getTracks().forEach(track => track.stop());
+    if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+    }
     localVideo.srcObject = null;
     remoteVideo.srcObject = null;
     alert("Call ended.");
