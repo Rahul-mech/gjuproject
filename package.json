@@ -1,13 +1,17 @@
 {
-     "name": "classmate-backend",
-     "version": "1.0.0",
-     "description": "Backend for Classmate video chat",
-     "main": "server.js",
-     "scripts": {
-       "start": "node server.js"
-     },
-     "dependencies": {
-       "express": "^4.18.2",
-       "socket.io": "^4.5.4"
-     }
+  "name": "classmate-backend",
+  "version": "1.0.0",
+  "description": "Backend for Classmate video chat",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4"
+  },
+  "engines": {
+    "node": "18.x"
+  }
 }
