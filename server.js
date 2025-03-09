@@ -1,32 +1,52 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-const path = require('path'); // Add this line
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Serve static files from the root directory
-app.use(express.static(path.join(__dirname))); // Add this line
+let waitingUsers = []; // Array to store waiting users
 
-// Socket.IO logic for video chat
-let waitingUsers = [];
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname)));
+
+// Socket.IO logic
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
+  // When a user requests a video chat
   socket.on('request-video-chat', () => {
     waitingUsers.push(socket.id);
 
+    // If there are at least 2 users waiting, pair them
     if (waitingUsers.length >= 2) {
       const user1 = waitingUsers.shift();
       const user2 = waitingUsers.shift();
 
+      // Notify both users to start the chat
       io.to(user1).emit('chat-started', user2);
       io.to(user2).emit('chat-started', user1);
     }
   });
 
+  // When a user clicks "Next"
+  socket.on('next-user', () => {
+    waitingUsers.push(socket.id); // Re-queue the user
+
+    // If there are at least 2 users waiting, pair them
+    if (waitingUsers.length >= 2) {
+      const user1 = waitingUsers.shift();
+      const user2 = waitingUsers.shift();
+
+      // Notify both users to start the chat
+      io.to(user1).emit('chat-started', user2);
+      io.to(user2).emit('chat-started', user1);
+    }
+  });
+
+  // Handle WebRTC signaling
   socket.on('offer', ({ to, offer }) => {
     io.to(to).emit('offer', { offer, from: socket.id });
   });
@@ -39,6 +59,7 @@ io.on('connection', (socket) => {
     io.to(to).emit('ice-candidate', { candidate, from: socket.id });
   });
 
+  // When a user disconnects
   socket.on('disconnect', () => {
     console.log('A user disconnected:', socket.id);
     waitingUsers = waitingUsers.filter(user => user !== socket.id);
