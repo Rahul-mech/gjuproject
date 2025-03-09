@@ -1,7 +1,7 @@
 {
-  "name": "classmate-backend",
+  "name": "classmate-website",
   "version": "1.0.0",
-  "description": "Backend for Classmate video chat",
+  "description": "Classmate website with video chat",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
