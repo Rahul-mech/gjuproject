@@ -1,39 +1,41 @@
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
+const express = require('express');
+   const http = require('http');
+   const { Server } = require('socket.io');
 
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+   const app = express();
+   const server = http.createServer(app);
+   const io = new Server(server);
 
-let waitingUser = null;
+   // Store users waiting for a match
+   let waitingUsers = [];
 
-io.on("connection", (socket) => {
-    if (waitingUser) {
-        // Pair the new user with the waiting user
-        socket.partner = waitingUser;
-        waitingUser.partner = socket;
+   io.on('connection', (socket) => {
+       console.log('A user connected:', socket.id);
 
-        socket.emit("match-found");
-        waitingUser.emit("match-found");
+       // When a user requests a video chat
+       socket.on('request-video-chat', () => {
+           waitingUsers.push(socket.id);
 
-        waitingUser = null;
-    } else {
-        // No one is waiting, so this user waits
-        waitingUser = socket;
-    }
+           // If there are at least 2 users waiting, pair them
+           if (waitingUsers.length >= 2) {
+               const user1 = waitingUsers.shift();
+               const user2 = waitingUsers.shift();
 
-    socket.on("disconnect", () => {
-        if (socket.partner) {
-            socket.partner.emit("partner-disconnected");
-            socket.partner.partner = null;
-        }
-        if (waitingUser === socket) {
-            waitingUser = null;
-        }
-    });
-});
+               // Notify both users to start the chat
+               io.to(user1).emit('chat-started', user2);
+               io.to(user2).emit('chat-started', user1);
+           }
+       });
 
-server.listen(3000, () => {
-    console.log("Server running on port 3000");
-});
+       // When a user disconnects
+       socket.on('disconnect', () => {
+           console.log('A user disconnected:', socket.id);
+           waitingUsers = waitingUsers.filter(user => user !== socket.id);
+       });
+   });
+
+   // Start the server
+   const PORT = 3000;
+   server.listen(PORT, () => {
+       console.log(`Server is running on http://localhost:${PORT}`);
+   });
