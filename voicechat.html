@@ -3,17 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Chat</title>
+    <title>Video Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        video {
+            width: 45%;
+            height: auto;
+            border: 2px solid black;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h2>Anonymous Voice Chat</h2>
-    
-    <button id="startCall">Start Call</button>
-    <button id="endCall">End Call</button>
 
-    <!-- This is where remote audio will play -->
-    <audio id="remoteAudio" autoplay></audio>
+    <h1>Random Video Chat</h1>
 
-    <script src="voicechat.js"></script>
+    <video id="localVideo" autoplay playsinline></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+
+    <br>
+
+    <button id="startCall">Start Chat</button>
+    <button id="endCall">End Chat</button>
+
+    <script src="videochat.js"></script>
+
 </body>
 </html>
