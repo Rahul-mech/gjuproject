@@ -1,3 +1,18 @@
+const socket = new WebSocket("wss://gjuproject.onrender.com");
+
+socket.onopen = () => {
+    console.log("Connected to WebSocket server");
+};
+
+socket.onmessage = (event) => {
+    console.log("Message received:", event.data);
+    const data = JSON.parse(event.data);
+
+    if (data.type === "pairing") {
+        console.log("Paired with another user.");
+    }
+};
+
 const ws = new WebSocket("wss://gjuproject.onrender.com"); // WebSocket connection
 
 // Log WebSocket events for debugging
