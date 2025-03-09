@@ -43,12 +43,12 @@ stopButton.addEventListener('click', () => {
 // Next user
 nextButton.addEventListener('click', () => {
   if (peerConnection) {
-    peerConnection.close();
+    peerConnection.close(); // Close the current connection
   }
   if (localStream) {
-    localStream.getTracks().forEach(track => track.stop());
+    localStream.getTracks().forEach(track => track.stop()); // Stop local stream
   }
-  socket.emit('next-user');
+  socket.emit('next-user'); // Notify the server to re-queue the user
   nextButton.disabled = true;
 });
 
