@@ -1,13 +1,13 @@
 {
-  "name": "classmate-videochat",
-  "version": "1.0.0",
-  "description": "Anonymous One-on-One Video Chat",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^4.5.4"
-  }
+     "name": "classmate-backend",
+     "version": "1.0.0",
+     "description": "Backend for Classmate video chat",
+     "main": "server.js",
+     "scripts": {
+       "start": "node server.js"
+     },
+     "dependencies": {
+       "express": "^4.18.2",
+       "socket.io": "^4.5.4"
+     }
 }
