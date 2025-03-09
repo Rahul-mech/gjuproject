@@ -4,16 +4,10 @@ const localVideo = document.getElementById('local-video');
 const remoteVideo = document.getElementById('remote-video');
 const startButton = document.getElementById('start-button');
 const stopButton = document.getElementById('stop-button');
+const nextButton = document.getElementById('next-button');
 
 let localStream;
 let peerConnection;
-
-// ICE servers for WebRTC (you can add TURN servers if needed)
-const iceServers = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' }, // Google's public STUN server
-  ],
-};
 
 // Start video chat
 startButton.addEventListener('click', async () => {
@@ -25,8 +19,9 @@ startButton.addEventListener('click', async () => {
     // Request a video chat
     socket.emit('request-video-chat');
 
-    // Enable the stop button
+    // Enable the stop and next buttons
     stopButton.disabled = false;
+    nextButton.disabled = false;
   } catch (error) {
     console.error('Error accessing media devices:', error);
   }
@@ -42,6 +37,19 @@ stopButton.addEventListener('click', () => {
   }
   socket.emit('end-chat');
   stopButton.disabled = true;
+  nextButton.disabled = true;
+});
+
+// Next user
+nextButton.addEventListener('click', () => {
+  if (peerConnection) {
+    peerConnection.close();
+  }
+  if (localStream) {
+    localStream.getTracks().forEach(track => track.stop());
+  }
+  socket.emit('next-user');
+  nextButton.disabled = true;
 });
 
 // Handle WebRTC signaling
@@ -66,7 +74,8 @@ socket.on('ice-candidate', ({ candidate, from }) => {
 
 // Create a peer connection
 function createPeerConnection(otherUserId) {
-  peerConnection = new RTCPeerConnection(iceServers);
+  const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+  peerConnection = new RTCPeerConnection(configuration);
 
   // Add local stream tracks to the peer connection
   localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
