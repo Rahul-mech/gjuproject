@@ -4,45 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Chat</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        h2 {
-            margin-top: 20px;
-        }
-        iframe {
-            width: 90%;
-            height: 80vh;
-            border: none;
-            margin-top: 10px;
-        }
-        p {
-            margin-top: 10px;
-        }
-        a {
-            color: blue;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    
 </head>
 <body>
-    <h2>Join the Video Chat</h2>
+    <h1>Random Video Chat</h1>
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+    <br>
+    <button id="startCall">Start Chat</button>
+    <button id="endCall">End Chat</button>
 
-    <!-- Jitsi Meet Embed -->
-    <iframe
-        src="https://meet.jit.si/ClassmateVideoChat"
-        allow="camera; microphone; fullscreen; display-capture">
-    </iframe>
-
-    <p>If the video chat doesn't load, click <a href="https://meet.jit.si/ClassmateVideoChat" target="_blank">here</a>.</p>
+    <script src="videochat.js"></script>
 </body>
 </html>
