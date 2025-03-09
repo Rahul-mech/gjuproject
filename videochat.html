@@ -4,15 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+        iframe {
+            width: 90%;
+            height: 80vh;
+            border: none;
+            margin-top: 10px;
+        }
+        p {
+            margin-top: 10px;
+        }
+        a {
+            color: blue;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2>Join Video Chat</h2>
-    <div id="jitsi-container" style="height: 500px; width: 100%;"></div>
+    <h2>Join the Video Chat</h2>
 
-    <script src="https://meet.jit.si/external_api.js"></script>
-    <script>
-        const domain = "meet.jit.si";
-        const options = {
-            roomName: "Classmate-VideoChat", // Unique room name
-            parentNode: document.getElementById("jitsi-container"),
-          
+    <!-- Jitsi Meet Embed -->
+    <iframe
+        src="https://meet.jit.si/ClassmateVideoChat"
+        allow="camera; microphone; fullscreen; display-capture">
+    </iframe>
+
+    <p>If the video chat doesn't load, click <a href="https://meet.jit.si/ClassmateVideoChat" target="_blank">here</a>.</p>
+</body>
+</html>
