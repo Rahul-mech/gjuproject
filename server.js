@@ -46,6 +46,16 @@ io.on('connection', (socket) => {
     }
   });
 
+  // When a user leaves the queue
+  socket.on('leave-queue', () => {
+    waitingUsers = waitingUsers.filter(user => user !== socket.id);
+  });
+
+  // When a user ends the chat
+  socket.on('end-chat', () => {
+    waitingUsers = waitingUsers.filter(user => user !== socket.id);
+  });
+
   // Handle WebRTC signaling
   socket.on('offer', ({ to, offer }) => {
     io.to(to).emit('offer', { offer, from: socket.id });
