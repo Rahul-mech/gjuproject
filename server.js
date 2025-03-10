@@ -1,83 +1,97 @@
 const express = require('express');
 const http = require('http');
-const { Server } = require('socket.io');
+const socketIo = require('socket.io');
 const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = socketIo(server);
 
-let waitingUsers = []; // Array to store waiting users
+// Serve static files (if needed)
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve static files from the root directory
-app.use(express.static(path.join(__dirname)));
+const waitingUsers = []; // Queue of users waiting for a chat partner
+const activeChats = new Map(); // Store active chat pairs
 
-// Socket.IO logic
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
+    console.log(`User connected: ${socket.id}`);
 
-  // When a user requests a video chat
-  socket.on('request-video-chat', () => {
-    waitingUsers.push(socket.id);
+    // Handle request for video chat
+    socket.on('request-video-chat', () => {
+        waitingUsers.push(socket.id);
 
-    // If there are at least 2 users waiting, pair them
-    if (waitingUsers.length >= 2) {
-      const user1 = waitingUsers.shift();
-      const user2 = waitingUsers.shift();
+        if (waitingUsers.length >= 2) {
+            const user1 = waitingUsers.shift();
+            const user2 = waitingUsers.shift();
 
-      // Notify both users to start the chat
-      io.to(user1).emit('chat-started', user2);
-      io.to(user2).emit('chat-started', user1);
-    }
-  });
+            activeChats.set(user1, user2);
+            activeChats.set(user2, user1);
 
-  // When a user clicks "Next"
-  socket.on('next-user', () => {
-    waitingUsers.push(socket.id); // Re-queue the user
+            // Notify both users that chat has started
+            io.to(user1).emit('chat-started', { otherUserId: user2, isInitiator: true });
+            io.to(user2).emit('chat-started', { otherUserId: user1, isInitiator: false });
 
-    // If there are at least 2 users waiting, pair them
-    if (waitingUsers.length >= 2) {
-      const user1 = waitingUsers.shift();
-      const user2 = waitingUsers.shift();
+            console.log(`Paired users: ${user1} ↔ ${user2}`);
+        }
+    });
 
-      // Notify both users to start the chat
-      io.to(user1).emit('chat-started', user2);
-      io.to(user2).emit('chat-started', user1);
-    }
-  });
+    // Handle WebRTC signaling
+    socket.on('offer', ({ to, offer }) => {
+        io.to(to).emit('offer', { offer, from: socket.id });
+    });
 
-  // When a user leaves the queue
-  socket.on('leave-queue', () => {
-    waitingUsers = waitingUsers.filter(user => user !== socket.id);
-  });
+    socket.on('answer', ({ to, answer }) => {
+        io.to(to).emit('answer', { answer, from: socket.id });
+    });
 
-  // When a user ends the chat
-  socket.on('end-chat', () => {
-    waitingUsers = waitingUsers.filter(user => user !== socket.id);
-  });
+    socket.on('ice-candidate', ({ to, candidate }) => {
+        io.to(to).emit('ice-candidate', { candidate, from: socket.id });
+    });
 
-  // Handle WebRTC signaling
-  socket.on('offer', ({ to, offer }) => {
-    io.to(to).emit('offer', { offer, from: socket.id });
-  });
+    // Handle user ending the chat
+    socket.on('end-chat', () => {
+        const partner = activeChats.get(socket.id);
+        if (partner) {
+            io.to(partner).emit('chat-ended'); // Notify the partner
+            activeChats.delete(socket.id);
+            activeChats.delete(partner);
+        }
+    });
 
-  socket.on('answer', ({ to, answer }) => {
-    io.to(to).emit('answer', { answer, from: socket.id });
-  });
+    // Handle "Next User" feature
+    socket.on('next-user', () => {
+        const partner = activeChats.get(socket.id);
+        if (partner) {
+            io.to(partner).emit('chat-ended'); // Notify partner
+            activeChats.delete(socket.id);
+            activeChats.delete(partner);
 
-  socket.on('ice-candidate', ({ to, candidate }) => {
-    io.to(to).emit('ice-candidate', { candidate, from: socket.id });
-  });
+            // Re-add both users to the queue for a new match
+            waitingUsers.push(socket.id);
+            waitingUsers.push(partner);
+        }
+    });
 
-  // When a user disconnects
-  socket.on('disconnect', () => {
-    console.log('A user disconnected:', socket.id);
-    waitingUsers = waitingUsers.filter(user => user !== socket.id);
-  });
+    // Handle user disconnection
+    socket.on('disconnect', () => {
+        console.log(`User disconnected: ${socket.id}`);
+
+        // Remove from waiting list if disconnected
+        const index = waitingUsers.indexOf(socket.id);
+        if (index !== -1) {
+            waitingUsers.splice(index, 1);
+        }
+
+        // Remove from active chats and notify the partner
+        const partner = activeChats.get(socket.id);
+        if (partner) {
+            io.to(partner).emit('chat-ended');
+            activeChats.delete(partner);
+        }
+        activeChats.delete(socket.id);
+    });
 });
 
 // Start the server
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+server.listen(PORT, () => console.log(`🔥 Server running on port ${PORT}`));
