@@ -1,12 +1,23 @@
+const socket = io(); // Connect to the server
+
+const localVideo = document.getElementById("local-video");
+const remoteVideo = document.getElementById("remote-video");
+const startButton = document.getElementById("start-button");
+const stopButton = document.getElementById("stop-button");
+
+let localStream;
+let peerConnection;
+
+// Function to get ICE servers from Xirsys
 async function getICEServers() {
     try {
         let response = await fetch("https://global.xirsys.net/_turn/MyFirstApp", {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Basic " + btoa("gjuproject:7c6388be-fd7b-11ef-9737-0242ac150002")
             },
             body: JSON.stringify({ format: "urls" }),
-            credentials: "include"
         });
 
         let data = await response.json();
@@ -21,27 +32,55 @@ async function getICEServers() {
 async function startWebRTC() {
     const iceServers = await getICEServers();
 
-    const peerConnection = new RTCPeerConnection({
-        iceServers: iceServers
-    });
+    peerConnection = new RTCPeerConnection({ iceServers });
 
-    // Set up event listeners for ICE candidates
-    peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-            console.log("New ICE candidate:", event.candidate);
-        }
+    // Add local stream to peer connection
+    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    localVideo.srcObject = localStream;
+    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+    // Handle remote stream
+    peerConnection.ontrack = (event) => {
+        remoteVideo.srcObject = event.streams[0];
     };
 
-    // Handle video/audio stream
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(stream => {
-            document.getElementById("localVideo").srcObject = stream;
-            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-        })
-        .catch(error => console.error("Error accessing media devices:", error));
+    // Handle ICE candidates
+    peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+            socket.emit("ice-candidate", event.candidate);
+        }
+    };
 
     return peerConnection;
 }
 
-// Start WebRTC when the page loads
-startWebRTC();
+// Start chat on button click
+startButton.addEventListener("click", async () => {
+    startButton.disabled = true;
+    peerConnection = await startWebRTC();
+    socket.emit("request-video-chat");
+});
+
+// Stop chat
+stopButton.addEventListener("click", () => {
+    if (peerConnection) peerConnection.close();
+    if (localStream) localStream.getTracks().forEach(track => track.stop());
+    socket.emit("end-chat");
+    startButton.disabled = false;
+});
+
+// Handle signaling
+socket.on("offer", async (offer) => {
+    peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
+    socket.emit("answer", answer);
+});
+
+socket.on("answer", async (answer) => {
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+});
+
+socket.on("ice-candidate", async (candidate) => {
+    await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+});
