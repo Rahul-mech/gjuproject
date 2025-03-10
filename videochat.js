@@ -5,10 +5,11 @@ const remoteVideo = document.getElementById('remote-video');
 const startButton = document.getElementById('start-button');
 const stopButton = document.getElementById('stop-button');
 const nextButton = document.getElementById('next-button');
-const statusText = document.getElementById('status');
 
 let localStream;
 let peerConnection;
+let otherUserId;
+let isInitiator = false;
 
 // Start video chat
 startButton.addEventListener('click', async () => {
@@ -23,67 +24,59 @@ startButton.addEventListener('click', async () => {
     // Enable the stop and next buttons
     stopButton.disabled = false;
     nextButton.disabled = false;
-
-    // Update status
-    updateStatus('Waiting for a match...');
   } catch (error) {
     console.error('Error accessing media devices:', error);
-    updateStatus('Failed to access media devices.');
   }
 });
 
 // Stop video chat
 stopButton.addEventListener('click', () => {
-  resetUI();
-  socket.emit('leave-queue');
+  endCall();
   socket.emit('end-chat');
 });
 
 // Next user
 nextButton.addEventListener('click', () => {
-  resetUI();
-  socket.emit('leave-queue');
+  endCall();
   socket.emit('next-user');
 });
 
 // Handle WebRTC signaling
-socket.on('chat-started', (otherUserId) => {
-  updateStatus('Call in progress...');
-  createPeerConnection(otherUserId);
+socket.on('chat-started', (data) => {
+  otherUserId = data.otherUserId;
+  isInitiator = data.isInitiator;
+  createPeerConnection();
+
+  if (isInitiator) {
+    createOffer();
+  }
 });
 
 socket.on('offer', ({ offer, from }) => {
-  if (!peerConnection) {
-    console.error('PeerConnection not initialized');
-    return;
-  }
+  otherUserId = from;
   peerConnection.setRemoteDescription(new RTCSessionDescription(offer))
     .then(() => peerConnection.createAnswer())
     .then(answer => peerConnection.setLocalDescription(answer))
-    .then(() => socket.emit('answer', { to: from, answer: peerConnection.localDescription }))
-    .catch(error => console.error('Error handling offer:', error));
+    .then(() => socket.emit('answer', { to: from, answer: peerConnection.localDescription }));
 });
 
 socket.on('answer', ({ answer }) => {
-  if (!peerConnection) {
-    console.error('PeerConnection not initialized');
-    return;
-  }
-  peerConnection.setRemoteDescription(new RTCSessionDescription(answer))
-    .catch(error => console.error('Error handling answer:', error));
+  peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
 });
 
-socket.on('ice-candidate', ({ candidate, from }) => {
-  if (!peerConnection) {
-    console.error('PeerConnection not initialized');
-    return;
+socket.on('ice-candidate', ({ candidate }) => {
+  if (peerConnection) {
+    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
   }
-  peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
-    .catch(error => console.error('Error adding ICE candidate:', error));
+});
+
+// Handle chat ending
+socket.on('chat-ended', () => {
+  endCall();
 });
 
 // Create a peer connection
-function createPeerConnection(otherUserId) {
+function createPeerConnection() {
   const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
   peerConnection = new RTCPeerConnection(configuration);
 
@@ -97,35 +90,31 @@ function createPeerConnection(otherUserId) {
 
   // Handle ICE candidates
   peerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
+    if (event.candidate && otherUserId) {
       socket.emit('ice-candidate', { to: otherUserId, candidate: event.candidate });
     }
   };
-
-  // Create an offer
-  peerConnection.createOffer()
-    .then(offer => peerConnection.setLocalDescription(offer))
-    .then(() => socket.emit('offer', { to: otherUserId, offer: peerConnection.localDescription }))
-    .catch(error => console.error('Error creating offer:', error));
 }
 
-// Reset UI and cleanup resources
-function resetUI() {
+// Create an offer (only if user is initiator)
+function createOffer() {
+  peerConnection.createOffer()
+    .then(offer => peerConnection.setLocalDescription(offer))
+    .then(() => socket.emit('offer', { to: otherUserId, offer: peerConnection.localDescription }));
+}
+
+// End the call
+function endCall() {
   if (localStream) {
     localStream.getTracks().forEach(track => track.stop());
-    localStream = null;
   }
   if (peerConnection) {
     peerConnection.close();
-    peerConnection = null;
   }
+  localVideo.srcObject = null;
   remoteVideo.srcObject = null;
+  peerConnection = null;
+  otherUserId = null;
   stopButton.disabled = true;
   nextButton.disabled = true;
-  updateStatus('Call ended. Click "Start Video Chat" to begin again.');
-}
-
-// Update status text
-function updateStatus(message) {
-  statusText.textContent = message;
 }
