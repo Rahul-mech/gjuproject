@@ -8,9 +8,11 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 20px;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 20px;
         }
-        #video-container {
+        .video-container {
             display: flex;
             justify-content: center;
             gap: 20px;
@@ -18,46 +20,40 @@
         }
         video {
             width: 45%;
-            max-width: 400px;
+            max-width: 500px;
             border: 2px solid #007BFF;
-            border-radius: 10px;
+            border-radius: 5px;
+            background: black;
         }
-        #controls {
+        .control-buttons {
             margin-top: 20px;
         }
         button {
             padding: 10px 20px;
-            font-size: 16px;
-            background: #007BFF;
-            color: white;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
+            color: white;
         }
-        button:hover {
-            background: #0056b3;
-        }
+        .start-btn { background: #007BFF; }
+        .end-btn { background: #DC3545; }
+        .start-btn:hover { background: #0056b3; }
+        .end-btn:hover { background: #a71d2a; }
     </style>
 </head>
 <body>
     <h1>Video Chat</h1>
-    <p id="status">Waiting to connect with another student...</p>
-
-    <!-- Video elements for local and remote streams -->
-    <div id="video-container">
-        <video id="local-video" autoplay muted></video>
-        <video id="remote-video" autoplay></video>
+    <div class="video-container">
+        <video id="localVideo" autoplay playsinline muted></video>
+        <video id="remoteVideo" autoplay playsinline></video>
     </div>
-
-    <!-- Controls for starting/stopping the chat -->
-    <div id="controls">
-        <button id="start-button">Start Video Chat</button>
-        <button id="stop-button" disabled>Stop Video Chat</button>
-        <button id="next-button" disabled>Next User</button>
+    <div class="control-buttons">
+        <button class="start-btn" onclick="startCall()">Start Call</button>
+        <button class="end-btn" onclick="endCall()">End Call</button>
     </div>
-
-    <!-- Include Socket.IO and your custom script -->
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    
     <script src="videochat.js"></script>
 </body>
 </html>
