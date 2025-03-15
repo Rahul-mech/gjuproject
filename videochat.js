@@ -1,86 +1,50 @@
-const socket = io(); // Connect to the server
-
-const localVideo = document.getElementById("local-video");
-const remoteVideo = document.getElementById("remote-video");
-const startButton = document.getElementById("start-button");
-const stopButton = document.getElementById("stop-button");
-
+const socket = io("wss://your-signaling-server.com"); // Change this to your actual signaling server
 let localStream;
 let peerConnection;
+const config = {
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+};
 
-// Function to get ICE servers from Xirsys
-async function getICEServers() {
-    try {
-        let response = await fetch("https://global.xirsys.net/_turn/MyFirstApp", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Basic " + btoa("gjuproject:7c6388be-fd7b-11ef-9737-0242ac150002")
-            },
-            body: JSON.stringify({ format: "urls" }),
-        });
-
-        let data = await response.json();
-        return data.v?.iceServers || []; // Return ICE servers or empty array if unavailable
-    } catch (error) {
-        console.error("Error fetching ICE servers:", error);
-        return [];
-    }
-}
-
-// Initialize WebRTC Connection
-async function startWebRTC() {
-    const iceServers = await getICEServers();
-
-    peerConnection = new RTCPeerConnection({ iceServers });
-
-    // Add local stream to peer connection
+document.getElementById("startCall").addEventListener("click", async () => {
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    localVideo.srcObject = localStream;
+    document.getElementById("localVideo").srcObject = localStream;
+    peerConnection = new RTCPeerConnection(config);
     localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-    // Handle remote stream
-    peerConnection.ontrack = (event) => {
-        remoteVideo.srcObject = event.streams[0];
-    };
-
-    // Handle ICE candidates
-    peerConnection.onicecandidate = (event) => {
+    peerConnection.onicecandidate = event => {
         if (event.candidate) {
-            socket.emit("ice-candidate", event.candidate);
+            socket.emit("candidate", event.candidate);
         }
     };
+    peerConnection.ontrack = event => {
+        document.getElementById("remoteVideo").srcObject = event.streams[0];
+    };
 
-    return peerConnection;
-}
-
-// Start chat on button click
-startButton.addEventListener("click", async () => {
-    startButton.disabled = true;
-    peerConnection = await startWebRTC();
-    socket.emit("request-video-chat");
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+    socket.emit("offer", offer);
 });
 
-// Stop chat
-stopButton.addEventListener("click", () => {
-    if (peerConnection) peerConnection.close();
-    if (localStream) localStream.getTracks().forEach(track => track.stop());
-    socket.emit("end-chat");
-    startButton.disabled = false;
-});
+socket.on("offer", async offer => {
+    peerConnection = new RTCPeerConnection(config);
+    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-// Handle signaling
-socket.on("offer", async (offer) => {
-    peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    await peerConnection.setRemoteDescription(offer);
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
     socket.emit("answer", answer);
 });
 
-socket.on("answer", async (answer) => {
-    await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+socket.on("answer", answer => {
+    peerConnection.setRemoteDescription(answer);
 });
 
-socket.on("ice-candidate", async (candidate) => {
-    await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+socket.on("candidate", candidate => {
+    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+});
+
+document.getElementById("endCall").addEventListener("click", () => {
+    if (peerConnection) peerConnection.close();
+    document.getElementById("localVideo").srcObject = null;
+    document.getElementById("remoteVideo").srcObject = null;
 });
