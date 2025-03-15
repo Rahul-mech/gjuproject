@@ -1,93 +1,101 @@
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
-const path = require("path");
-
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
-
-// Serve static files from the root (since all files are in the main branch)
-app.use(express.static(__dirname));
-
-// Serve the main HTML file when users visit "/"
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
-
-const waitingUsers = [];
-const activeChats = new Map();
-
-io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
-
-    socket.on("request-video-chat", () => {
-        waitingUsers.push(socket.id);
-
-        if (waitingUsers.length >= 2) {
-            const user1 = waitingUsers.shift();
-            const user2 = waitingUsers.shift();
-
-            activeChats.set(user1, user2);
-            activeChats.set(user2, user1);
-
-            io.to(user1).emit("chat-started", { otherUserId: user2, isInitiator: true });
-            io.to(user2).emit("chat-started", { otherUserId: user1, isInitiator: false });
-
-            console.log(`Paired users: ${user1} ↔ ${user2}`);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.4.1/dist/socket.io.min.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
         }
-    });
-
-    socket.on("offer", ({ to, offer }) => {
-        io.to(to).emit("offer", { offer, from: socket.id });
-    });
-
-    socket.on("answer", ({ to, answer }) => {
-        io.to(to).emit("answer", { answer, from: socket.id });
-    });
-
-    socket.on("ice-candidate", ({ to, candidate }) => {
-        io.to(to).emit("ice-candidate", { candidate, from: socket.id });
-    });
-
-    socket.on("end-chat", () => {
-        const partner = activeChats.get(socket.id);
-        if (partner) {
-            io.to(partner).emit("chat-ended");
-            activeChats.delete(socket.id);
-            activeChats.delete(partner);
+        video {
+            width: 45%;
+            max-width: 600px;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            margin: 10px;
         }
-    });
-
-    socket.on("next-user", () => {
-        const partner = activeChats.get(socket.id);
-        if (partner) {
-            io.to(partner).emit("chat-ended");
-            activeChats.delete(socket.id);
-            activeChats.delete(partner);
-
-            waitingUsers.push(socket.id);
-            waitingUsers.push(partner);
+        .chat-option {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 20px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
         }
-    });
+        .chat-option:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Anonymous Video Chat</h1>
+    <video id="localVideo" autoplay playsinline muted></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+    <br>
+    <button class="chat-option" id="startCall">Start Chat</button>
+    <button class="chat-option" id="endCall">End Chat</button>
+    
+    <script>
+        const socket = io("wss://your-signaling-server.com"); // Change to your actual signaling server
+        let localStream;
+        let peerConnection;
+        const config = {
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+        };
 
-    socket.on("disconnect", () => {
-        console.log(`User disconnected: ${socket.id}`);
+        async function startCall() {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            document.getElementById("localVideo").srcObject = localStream;
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-        const index = waitingUsers.indexOf(socket.id);
-        if (index !== -1) {
-            waitingUsers.splice(index, 1);
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    socket.emit("candidate", event.candidate);
+                }
+            };
+            peerConnection.ontrack = event => {
+                document.getElementById("remoteVideo").srcObject = event.streams[0];
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.emit("offer", offer);
         }
 
-        const partner = activeChats.get(socket.id);
-        if (partner) {
-            io.to(partner).emit("chat-ended");
-            activeChats.delete(partner);
-        }
-        activeChats.delete(socket.id);
-    });
-});
+        socket.on("offer", async offer => {
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`🔥 Server running on port ${PORT}`));
+            await peerConnection.setRemoteDescription(offer);
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            socket.emit("answer", answer);
+        });
+
+        socket.on("answer", answer => {
+            peerConnection.setRemoteDescription(answer);
+        });
+
+        socket.on("candidate", candidate => {
+            peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        });
+
+        document.getElementById("startCall").addEventListener("click", startCall);
+        document.getElementById("endCall").addEventListener("click", () => {
+            if (peerConnection) peerConnection.close();
+            document.getElementById("localVideo").srcObject = null;
+            document.getElementById("remoteVideo").srcObject = null;
+        });
+    </script>
+</body>
+</html>
