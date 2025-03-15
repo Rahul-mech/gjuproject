@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discuss with Students</title>
+    <title>Video Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.4.1/dist/socket.io.min.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
-            background: #f0f0f0;
         }
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        video {
+            width: 45%;
+            max-width: 600px;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            margin: 10px;
         }
         .chat-option {
             display: inline-block;
@@ -28,33 +30,72 @@
             cursor: pointer;
             text-decoration: none;
             border-radius: 5px;
-            transition: background 0.3s;
         }
         .chat-option:hover {
             background: #0056b3;
         }
-        #status {
-            margin-top: 15px;
-            font-size: 16px;
-            color: #333;
-        }
     </style>
 </head>
 <body>
-
-    <h1>Discuss with Other Students</h1>
-    <p>Connect randomly with other students for a video discussion.</p>
+    <h1>Anonymous Video Chat</h1>
+    <video id="localVideo" autoplay playsinline muted></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+    <br>
+    <button class="chat-option" id="startCall">Start Chat</button>
+    <button class="chat-option" id="endCall">End Chat</button>
     
-    <div class="chat-container">
-        <button id="startChat" class="chat-option">Start Video Chat</button>
-        <p id="status">Waiting for a student...</p>
-    </div>
-
     <script>
-        document.getElementById('startChat').addEventListener('click', function() {
-            window.location.href = 'videochat.html';
+        const socket = io("wss://your-signaling-server.com"); // Change to your actual signaling server
+        let localStream;
+        let peerConnection;
+        const config = {
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+        };
+
+        async function startCall() {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            document.getElementById("localVideo").srcObject = localStream;
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    socket.emit("candidate", event.candidate);
+                }
+            };
+            peerConnection.ontrack = event => {
+                document.getElementById("remoteVideo").srcObject = event.streams[0];
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.emit("offer", offer);
+        }
+
+        socket.on("offer", async offer => {
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+            await peerConnection.setRemoteDescription(offer);
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            socket.emit("answer", answer);
+        });
+
+        socket.on("answer", answer => {
+            peerConnection.setRemoteDescription(answer);
+        });
+
+        socket.on("candidate", candidate => {
+            peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        });
+
+        document.getElementById("startCall").addEventListener("click", startCall);
+        document.getElementById("endCall").addEventListener("click", () => {
+            if (peerConnection) peerConnection.close();
+            document.getElementById("localVideo").srcObject = null;
+            document.getElementById("remoteVideo").srcObject = null;
         });
     </script>
-
 </body>
 </html>
