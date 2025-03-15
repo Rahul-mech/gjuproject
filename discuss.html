@@ -9,6 +9,13 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
+            background: #f0f0f0;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .chat-option {
             display: inline-block;
@@ -21,17 +28,33 @@
             cursor: pointer;
             text-decoration: none;
             border-radius: 5px;
+            transition: background 0.3s;
         }
         .chat-option:hover {
             background: #0056b3;
+        }
+        #status {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #333;
         }
     </style>
 </head>
 <body>
 
     <h1>Discuss with Other Students</h1>
+    <p>Connect randomly with other students for a video discussion.</p>
     
-    <a href="videochat.html" class="chat-option">Start Video Chat</a>
+    <div class="chat-container">
+        <button id="startChat" class="chat-option">Start Video Chat</button>
+        <p id="status">Waiting for a student...</p>
+    </div>
+
+    <script>
+        document.getElementById('startChat').addEventListener('click', function() {
+            window.location.href = 'videochat.html';
+        });
+    </script>
 
 </body>
 </html>
