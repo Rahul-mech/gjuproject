@@ -1,50 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discuss with Students</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-            background: #f0f0f0;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        .chat-option {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 20px;
-            color: white;
-            background: #007BFF;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        .chat-option:hover {
-            background: #0056b3;
-        }
-    </style>
-</head>
-<body>
 
-    <div class="container">
-        <h1>Discuss with Other Students</h1>
-        <p>Connect instantly with other students for discussions and learning.</p>
-        <a href="videochat.html" class="chat-option">Start Video Chat</a>
+<html>
+
+<head>
+    <title>Delta Meet</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <h1 class="title">Delta Meet</h1>
+    <p id="notification" hidden></p>
+    <div class="entry-modal" id="entry-modal">
+        <p>Create or Join Meeting</p>
+        <input id="room-input" class="room-input" placeholder="Enter Room ID">
+        <div>
+            <button onclick="createRoom()">Create Room</button>
+            <button onclick="joinRoom()">Join Room</button>
+        </div>
     </div>
-    
+    <div class="meet-area">
+        <!-- Remote Video Element-->
+        <video id="remote-video"></video>
+
+        <!-- Local Video Element-->
+        <video id="local-video"></video>
+        <div class="meet-controls-bar">
+            <button onclick="startScreenShare()">Screen Share</button>
+        </div>
+    </div>
 </body>
+
+<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+<script src="script.js"></script>
+
 </html>
