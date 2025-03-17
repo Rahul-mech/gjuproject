@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discuss - Peer Doubt Clearing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        #video-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        video {
+            width: 400px;
+            height: 300px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #000;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bhai se Doubt Pooche</h1>
+    <button id="connectButton">Connect with a Peer</button>
+    <div id="video-container">
+        <video id="localVideo" autoplay playsinline muted></video>
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script>
+        const socket = io('http://localhost:3000'); // Change to your server URL after deployment
+        const peer = new Peer(); // PeerJS for WebRTC
+        let myStream;
+
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const connectButton = document.getElementById('connectButton');
+
+        // Get user media (video + audio)
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(stream => {
+                myStream = stream;
+                localVideo.srcObject = stream;
+            })
+            .catch(err => console.error('Error accessing media devices:', err));
+
+        // PeerJS setup
+        peer.on('open', id => {
+            socket.emit('new-user', id); // Send peer ID to server
+        });
+
+        // When someone calls you
+        peer.on('call', call => {
+            call.answer(myStream); // Answer with your stream
+            call.on('stream', remoteStream => {
+                remoteVideo.srcObject = remoteStream; // Show their video
+            });
+        });
+
+        // Connect button logic
+        connectButton.addEventListener('click', () => {
+            socket.emit('request-connection'); // Ask server for a peer
+        });
+
+        // Server tells you to call someone
+        socket.on('connect-to', peerId => {
+            const call = peer.call(peerId, myStream); // Call the peer
+            call.on('stream', remoteStream => {
+                remoteVideo.srcObject = remoteStream; // Show their video
+            });
+        });
+
+        socket.on('no-peers', () => {
+            alert('Koi peer available nahi hai, thodi der wait kar!');
+        });
+    </script>
+</body>
+</html>
