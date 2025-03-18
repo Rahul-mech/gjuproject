@@ -126,6 +126,7 @@
       text-decoration: none;
       transition: all 0.3s ease;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin: 10px; /* Added margin to prevent overlap */
     }
     .students-board-btn:hover {
       background: #28a745;
@@ -149,6 +150,17 @@
       }
       .bg-image {
         height: 300px;
+      }
+      .content-section {
+        width: 90%;
+        padding: 15px;
+      }
+      .students-board-btn {
+        display: block; /* Stack buttons vertically on small screens */
+        width: 80%;
+        margin: 10px auto; /* Center and add spacing */
+        font-size: 16px;
+        padding: 10px 20px;
       }
     }
   </style>
@@ -177,7 +189,7 @@
   <div class="bg-image"></div>
 
   <div class="content-section">
-    <p>Here you will get regular materials for your study. For previous year questions, notes, and other activities and reports regarding your college, you can visit us. Here, we will guide your study like your classmate.</p>
+    
     <a href="students_board.html" class="students-board-btn">Student's Board</a>
     <a href="discuss.html" class="students-board-btn">Discuss with Other Students</a>
   </div>
