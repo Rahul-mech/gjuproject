@@ -50,6 +50,7 @@
             display: flex;
             gap: 10px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         button {
             padding: 10px 20px;
@@ -100,6 +101,12 @@
                 height: 100%;
             }
         }
+        @media (max-width: 768px) {
+            button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -129,6 +136,20 @@
         const nextButton = document.getElementById('nextButton');
         const status = document.getElementById('status');
 
+        // Function to update button visibility
+        function updateButtonVisibility(isConnected) {
+            if (isConnected) {
+                connectButton.style.display = 'none';
+                disconnectButton.style.display = 'inline-block';
+                nextButton.style.display = 'inline-block';
+                status.style.display = 'none';
+            } else {
+                connectButton.style.display = 'inline-block';
+                disconnectButton.style.display = 'none';
+                nextButton.style.display = 'none';
+            }
+        }
+
         // Get user media
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             .then(stream => {
@@ -147,9 +168,7 @@
             currentCall = call;
             call.on('stream', remoteStream => {
                 remoteVideo.srcObject = remoteStream;
-                disconnectButton.style.display = 'inline-block';
-                nextButton.style.display = 'inline-block';
-                status.style.display = 'none';
+                updateButtonVisibility(true); // Update buttons when call connects
             });
         });
 
@@ -157,7 +176,7 @@
         connectButton.addEventListener('click', () => {
             socket.emit('request-connection');
             status.style.display = 'block';
-            connectButton.style.display = 'none';
+            updateButtonVisibility(false); // Keep connect button hidden while searching
         });
 
         // Server connects to peer
@@ -166,9 +185,7 @@
             currentCall = call;
             call.on('stream', remoteStream => {
                 remoteVideo.srcObject = remoteStream;
-                disconnectButton.style.display = 'inline-block';
-                nextButton.style.display = 'inline-block';
-                status.style.display = 'none';
+                updateButtonVisibility(true); // Update buttons when call connects
             });
         });
 
@@ -176,7 +193,7 @@
             status.textContent = 'No peers available, try again!';
             setTimeout(() => {
                 status.style.display = 'none';
-                connectButton.style.display = 'inline-block';
+                updateButtonVisibility(false); // Show connect button again
             }, 2000);
         });
 
@@ -185,9 +202,7 @@
             if (currentCall) {
                 currentCall.close();
                 remoteVideo.srcObject = null;
-                disconnectButton.style.display = 'none';
-                nextButton.style.display = 'none';
-                connectButton.style.display = 'inline-block';
+                updateButtonVisibility(false); // Show connect button, hide others
                 status.style.display = 'block';
                 status.textContent = 'Disconnected';
                 setTimeout(() => {
@@ -204,6 +219,7 @@
                 socket.emit('request-connection');
                 status.style.display = 'block';
                 status.textContent = 'Finding Next Match...';
+                updateButtonVisibility(false); // Keep connect button hidden while searching
             }
         });
     </script>
