@@ -7,172 +7,177 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #f0f0f0, #e0e7ff);
       color: #333;
+      line-height: 1.6;
     }
 
-    /* Top Section with white background */
+    /* Top Section */
     .top-section {
       background: #fff;
       padding: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      border: 2px solid green;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-bottom: 3px solid #667eea;
     }
-
-    /* Logo container */
     .logo-container {
       margin-right: 20px;
     }
-
-    /* Logo styling */
     .logo {
-      width: 150px;
-      height: 150px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
-      object-position: center;
+      transition: transform 0.3s ease;
     }
-
-    /* Main site title (CLASSMATE) in the center */
-    .site-title {
-      text-align: center;
-      flex: 1;
+    .logo:hover {
+      transform: scale(1.1);
     }
-
     .site-title h1 {
-      font-size: 36px;
-      font-weight: bold;
-      color: #444;
-      margin-bottom: 5px;
+      font-size: 42px;
+      font-weight: 700;
+      color: #2d3748;
+      letter-spacing: 1px;
     }
-
     .site-title p {
-      font-size: 14px;
+      font-size: 16px;
       color: #667eea;
-      margin: 0;
     }
-
     .site-title .project-tagline {
-      color: blue;
-      font-size: 14px;
-      margin-top: 5px;
+      color: #3182ce;
+      font-style: italic;
     }
 
-    /* Separator styling */
+    /* Separator */
     .separator {
       width: 80%;
-      max-width: 900px;
-      margin: 10px auto;
-      border-top: 4px solid #667eea;
+      max-width: 1000px;
+      margin: 15px auto;
+      border-top: 5px solid #667eea;
+      border-radius: 5px;
     }
 
-    /* Menu Section styling */
+    /* Menu Section */
     .menu {
       width: 80%;
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 1000px;
+      margin: 20px auto;
       display: flex;
-      justify-content: space-between;
-      padding: 5px 0;
+      gap: 15px;
+      justify-content: center;
     }
     .menu-item {
-      flex: 1;
-      text-align: center;
-      padding: 10px 0;
-      margin: 0 5px;
+      padding: 12px 20px;
       background: #007bff;
       color: white;
-      border-radius: 5px;
-      border: 2px solid #007bff;
-      transition: all 0.3s ease;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .menu-item:hover {
       background: #28a745;
-      border-color: #28a745;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    /* Background Image Section styling */
+    /* Background Image */
     .bg-image {
       width: 100%;
-      height: 600px;
+      height: 500px;
       background-image: url("https://github.com/Rahul-mech/gjuproject/raw/main/DALL%C2%B7E%202025-02-18%2018.18.19%20-%20A%20high-resolution%2C%20epic%20scene%20depicting%20Lord%20Krishna%20giving%20the%20Bhagavad%20Gita%20to%20Arjuna%20on%20a%20chariot.%20On%20the%20left%20side%20of%20the%20image%2C%20Arjuna%20is%20sitting.webp");
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
+      border-bottom: 5px solid #667eea;
     }
 
-    /* Centered content below Krishna image */
+    /* Content Section */
     .content-section {
       text-align: center;
-      padding: 20px;
+      padding: 30px;
+      background: #fff;
+      width: 80%;
+      max-width: 1000px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-
-    /* Student's Board Button */
+    .content-section p {
+      font-size: 18px;
+      color: #4a5568;
+      margin-bottom: 20px;
+    }
     .students-board-btn {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 12px 25px;
       background: #007bff;
       color: white;
-      border-radius: 5px;
-      border: 2px solid #007bff;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      text-decoration: none;
+      border-radius: 8px;
       font-size: 18px;
-      margin: 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
     .students-board-btn:hover {
       background: #28a745;
-      border-color: #28a745;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .top-section {
+        flex-direction: column;
+        text-align: center;
+      }
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+      .menu {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .bg-image {
+        height: 300px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Top Section -->
   <div class="top-section">
-    <!-- Logo Container -->
     <div class="logo-container">
-      <img src="https://raw.githubusercontent.com/Rahul-mech/gjuproject/main/DALL%C2%B7E%202025-03-08%2019.13.33%20-%20A%20modern%20and%20minimalistic%20logo%20featuring%20a%20group%20of%20students%20standing%20together%2C%20symbolizing%20education%20and%20collaboration.%20Include%20an%20open%20book%20or%20gradu.webp" 
-alt="StudyPoint Logo" class="logo" />
+      <img src="https://raw.githubusercontent.com/Rahul-mech/gjuproject/main/DALL%C2%B7E%202025-03-08%2019.13.33%20-%20A%20modern%20and%20minimalistic%20logo%20featuring%20a%20group%20of%20students%20standing%20together%2C%20symbolizing%20education%20and%20collaboration.%20Include%20an%20open%20book%20or%20gradu.webp" alt="StudyPoint Logo" class="logo" />
     </div>
-
-    <!-- Centered Site Title and Tagline -->
     <div class="site-title">
       <h1>CLASSMATE</h1>
       <p class="project-tagline">A Project By Mechanical Engineers</p>
     </div>
   </div>
 
-  <!-- First Separator Line -->
   <div class="separator"></div>
 
-  <!-- Menu Section -->
   <div class="menu">
     <div class="menu-item" onclick="window.location.href='previous_year_questions.html'">Previous Year</div>
     <div class="menu-item" onclick="window.location.href='extra_resources.html'">Extra Resources</div>
     <div class="menu-item" onclick="window.location.href='your_syllabus.html'">Your Syllabus</div>
   </div>
 
-  <!-- Second Separator Line -->
   <div class="separator"></div>
 
-  <!-- Background Image Section -->
   <div class="bg-image"></div>
 
-  <!-- Content Section Below Krishna Image -->
   <div class="content-section">
-    <p>
-      Here you will get regular materials for your study. For previous year questions, notes, and other activities and reports regarding your college, you can visit us. Here, we will guide your study like your classmate.
-    </p>
+    <p>Here you will get regular materials for your study. For previous year questions, notes, and other activities and reports regarding your college, you can visit us. Here, we will guide your study like your classmate.</p>
     <a href="students_board.html" class="students-board-btn">Student's Board</a>
     <a href="discuss.html" class="students-board-btn">Discuss with Other Students</a>
   </div>
