@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Previous Year Questions - Classmate</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Roboto', Arial, sans-serif; /* Professional font */
+      background: linear-gradient(135deg, #f0f4f8, #d9e6f2);
+      color: #1a2e44;
+      line-height: 1.6;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 90%;
+      max-width: 700px;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid #2c5282; /* Professional accent */
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    .progress {
+      text-align: center;
+      font-size: 14px;
+      color: #718096;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    label {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 10px;
+    }
+    select {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      background: #edf2f7;
+      color: #1a2e44;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+    select:focus {
+      outline: none;
+      border-color: #2c5282;
+    }
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 25px;
+      font-size: 15px;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    #backBtn {
+      background: #a0aec0;
+      display: none;
+    }
+    #backBtn:hover {
+      background: #718096;
+    }
+    #nextBtn {
+      background: #2c5282;
+    }
+    #nextBtn:hover {
+      background: #2b6cb0;
+    }
+    #showPDFsBtn {
+      background: #38a169;
+      display: none;
+    }
+    #showPDFsBtn:hover {
+      background: #2f855a;
+    }
+    #pdf-list {
+      margin-top: 20px;
+      text-align: left;
+      display: none;
+    }
+    #pdf-list a {
+      display: block;
+      padding: 10px;
+      margin: 5px 0;
+      background: #2c5282;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    #pdf-list a:hover {
+      background: #2b6cb0;
+      transform: translateX(5px);
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      select {
+        padding: 10px;
+        font-size: 14px;
+      }
+      button {
+        padding: 8px 20px;
+        font-size: 14px;
+      }
+      .buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Previous Year Papers</h1>
+    <div class="progress">Step 1 of 3</div>
+
+    <!-- Step 1: University Selection -->
+    <div class="step active" id="step1">
+      <label for="university">Select University:</label>
+      <select id="university" onchange="validateStep(1)">
+        <option value="" disabled selected>Select University</option>
+        <option value="gju">Guru Jambheshwar University (GJU)</option>
+      </select>
+    </div>
+
+    <!-- Step 2: Branch Selection -->
+    <div class="step" id="step2">
+      <div class="progress">Step 2 of 3</div>
+      <label for="branch">Select Branch:</label>
+      <select id="branch" onchange="validateStep(2)">
+        <option value="" disabled selected>Select Branch</option>
+      </select>
+    </div>
+
+    <!-- Step 3: Semester Selection -->
+    <div class="step" id="step3">
+      <div class="progress">Step 3 of 3</div>
+      <label for="semester">Select Semester:</label>
+      <select id="semester" onchange="validateStep(3)">
+        <option value="" disabled selected>Select Semester</option>
+      </select>
+    </div>
+
+    <!-- PDF List -->
+    <div id="pdf-list"></div>
+
+    <div class="buttons">
+      <button id="backBtn" onclick="goBack()">Back</button>
+      <button id="nextBtn" onclick="nextStep()">Next</button>
+      <button id="showPDFsBtn" onclick="showPDFs()">Show Papers</button>
+    </div>
+  </div>
+
+  <script>
+    const universities = {
+      gju: [
+        "Mechanical Engineering",
+        "Computer Science",
+        "Civil Engineering",
+        "Artificial Intelligence and Machine Learning",
+        "Electronics and Communications"
+      ]
+    };
+
+    const pdfs = {
+      gju: {
+        "Mechanical Engineering": {
+          1: ["https://example.com/gju/mech/sem1/exam1.pdf"],
+          2: ["https://example.com/gju/mech/sem2/exam1.pdf"],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: []
+        },
+        "Computer Science": {
+          1: ["https://example.com/gju/cs/sem1/exam1.pdf"],
+          2: ["https://example.com/gju/cs/sem2/exam1.pdf"],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: []
+        },
+        "Civil Engineering": {
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: []
+        },
+        "Artificial Intelligence and Machine Learning": {
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: []
+        },
+        "Electronics and Communications": {
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: []
+        }
+      }
+    };
+
+    let currentStep = 1;
+
+    function validateStep(step) {
+      const university = document.getElementById('university').value;
+      const branch = document.getElementById('branch').value;
+      const semester = document.getElementById('semester').value;
+
+      if (step === 1 && university) return true;
+      if (step === 2 && branch) return true;
+      if (step === 3 && semester) return true;
+      return false;
+    }
+
+    function nextStep() {
+      if (currentStep === 1) {
+        if (validateStep(1)) {
+          updateBranches();
+          showStep(2);
+        } else {
+          alert("Please select a university!");
+        }
+      } else if (currentStep === 2) {
+        if (validateStep(2)) {
+          updateSemesters();
+          showStep(3);
+        } else {
+          alert("Please select a branch!");
+        }
+      }
+    }
+
+    function goBack() {
+      if (currentStep > 1) {
+        showStep(currentStep - 1);
+        if (currentStep === 2) document.getElementById('backBtn').style.display = 'none';
+      }
+    }
+
+    function showStep(step) {
+      const steps = document.getElementsByClassName('step');
+      for (let i = 0; i < steps.length; i++) {
+        steps[i].classList.remove('active');
+      }
+      document.getElementById(`step${step}`).classList.add('active');
+      currentStep = step;
+      updateProgress();
+
+      if (step === 1) {
+        document.getElementById('backBtn').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('showPDFsBtn').style.display = 'none';
+      } else if (step === 2) {
+        document.getElementById('backBtn').style.display = 'inline-block';
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('showPDFsBtn').style.display = 'none';
+      } else if (step === 3) {
+        document.getElementById('backBtn').style.display = 'inline-block';
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('showPDFsBtn').style.display = 'inline-block';
+      }
+    }
+
+    function updateBranches() {
+      const university = document.getElementById('university').value;
+      const branchSelect = document.getElementById('branch');
+      branchSelect.innerHTML = '<option value="" disabled selected>Select Branch</option>';
+      if (university) {
+        universities[university].forEach(branch => {
+          const option = document.createElement('option');
+          option.value = branch;
+          option.textContent = branch;
+          branchSelect.appendChild(option);
+        });
+      }
+    }
+
+    function updateSemesters() {
+      const semesterSelect = document.getElementById('semester');
+      semesterSelect.innerHTML = '<option value="" disabled selected>Select Semester</option>';
+      for (let i = 1; i <= 8; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `Semester ${i}`;
+        semesterSelect.appendChild(option);
+      }
+    }
+
+    function showPDFs() {
+      const university = document.getElementById('university').value;
+      const branch = document.getElementById('branch').value;
+      const semester = document.getElementById('semester').value;
+      const pdfList = document.getElementById('pdf-list');
+
+      pdfList.style.display = 'block';
+      pdfList.innerHTML = '';
+
+      if (university && branch && semester) {
+        const availablePDFs = pdfs[university]?.[branch]?.[semester] || [];
+        if (availablePDFs.length > 0) {
+          availablePDFs.forEach(pdf => {
+            const link = document.createElement('a');
+            link.href = pdf;
+            link.textContent = `Download ${branch} Sem ${semester} Paper`;
+            link.target = '_blank';
+            pdfList.appendChild(link);
+          });
+        } else {
+          pdfList.innerHTML = '<p>No papers available for this selection.</p>';
+        }
+      } else {
+        pdfList.innerHTML = '<p>Please complete all steps to view papers.</p>';
+      }
+    }
+
+    function updateProgress() {
+      document.querySelectorAll('.progress').forEach(p => {
+        p.textContent = `Step ${currentStep} of 3`;
+      });
+    }
+  </script>
+</body>
+</html>
