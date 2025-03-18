@@ -14,38 +14,46 @@
             font-family: 'Poppins', Arial, sans-serif;
             text-align: center;
             background: linear-gradient(135deg, #f0f0f0, #e0e7ff);
-            padding: 20px;
             color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         h1 {
             font-size: 36px;
             font-weight: 700;
             color: #2d3748;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         #video-container {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            width: 100%;
+            height: 80vh;
+            max-width: 1000px;
+            gap: 10px;
+            padding: 10px;
         }
         video {
-            width: 500px;
-            height: 375px;
+            width: 100%;
+            height: 48%;
             border: 3px solid #667eea;
             border-radius: 10px;
             background-color: #000;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
+            object-fit: cover;
         }
-        video:hover {
-            transform: scale(1.02);
+        #button-container {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
         button {
-            padding: 12px 25px;
-            font-size: 18px;
-            background: #4CAF50;
+            padding: 10px 20px;
+            font-size: 16px;
             color: white;
             border: none;
             border-radius: 8px;
@@ -53,45 +61,75 @@
             transition: all 0.3s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        button:hover {
+        #connectButton {
+            background: #4CAF50;
+        }
+        #connectButton:hover {
             background: #45a049;
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        @media (max-width: 768px) {
+        #disconnectButton {
+            background: #e53e3e;
+            display: none;
+        }
+        #disconnectButton:hover {
+            background: #c53030;
+            transform: translateY(-3px);
+        }
+        #nextButton {
+            background: #3182ce;
+            display: none;
+        }
+        #nextButton:hover {
+            background: #2b6cb0;
+            transform: translateY(-3px);
+        }
+        #status {
+            font-size: 18px;
+            color: #4a5568;
+            margin-top: 10px;
+            display: none;
+        }
+        @media (min-width: 769px) {
+            #video-container {
+                flex-direction: row;
+                height: 70vh;
+            }
             video {
-                width: 300px;
-                height: 225px;
-            }
-            h1 {
-                font-size: 28px;
-            }
-            button {
-                font-size: 16px;
-                padding: 10px 20px;
+                width: 48%;
+                height: 100%;
             }
         }
     </style>
 </head>
 <body>
     <h1>Bhai se Doubt Pooche</h1>
-    <button id="connectButton">Connect with a Peer</button>
     <div id="video-container">
-        <video id="localVideo" autoplay playsinline muted></video>
         <video id="remoteVideo" autoplay playsinline></video>
+        <video id="localVideo" autoplay playsinline muted></video>
     </div>
+    <div id="button-container">
+        <button id="connectButton">Connect with a Peer</button>
+        <button id="disconnectButton">Disconnect</button>
+        <button id="nextButton">Next Peer</button>
+    </div>
+    <div id="status">Finding Match...</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script>
         const socket = io('https://gjuproject.onrender.com');
         const peer = new Peer();
-        let myStream;
+        let myStream, currentCall;
 
         const localVideo = document.getElementById('localVideo');
         const remoteVideo = document.getElementById('remoteVideo');
         const connectButton = document.getElementById('connectButton');
+        const disconnectButton = document.getElementById('disconnectButton');
+        const nextButton = document.getElementById('nextButton');
+        const status = document.getElementById('status');
 
+        // Get user media
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             .then(stream => {
                 myStream = stream;
@@ -99,30 +137,74 @@
             })
             .catch(err => console.error('Error accessing media devices:', err));
 
+        // PeerJS setup
         peer.on('open', id => {
             socket.emit('new-user', id);
         });
 
         peer.on('call', call => {
             call.answer(myStream);
+            currentCall = call;
             call.on('stream', remoteStream => {
                 remoteVideo.srcObject = remoteStream;
+                disconnectButton.style.display = 'inline-block';
+                nextButton.style.display = 'inline-block';
+                status.style.display = 'none';
             });
         });
 
+        // Connect button
         connectButton.addEventListener('click', () => {
             socket.emit('request-connection');
+            status.style.display = 'block';
+            connectButton.style.display = 'none';
         });
 
+        // Server connects to peer
         socket.on('connect-to', peerId => {
             const call = peer.call(peerId, myStream);
+            currentCall = call;
             call.on('stream', remoteStream => {
                 remoteVideo.srcObject = remoteStream;
+                disconnectButton.style.display = 'inline-block';
+                nextButton.style.display = 'inline-block';
+                status.style.display = 'none';
             });
         });
 
         socket.on('no-peers', () => {
-            alert('Koi peer available nahi hai, thodi der wait kar!');
+            status.textContent = 'No peers available, try again!';
+            setTimeout(() => {
+                status.style.display = 'none';
+                connectButton.style.display = 'inline-block';
+            }, 2000);
+        });
+
+        // Disconnect button
+        disconnectButton.addEventListener('click', () => {
+            if (currentCall) {
+                currentCall.close();
+                remoteVideo.srcObject = null;
+                disconnectButton.style.display = 'none';
+                nextButton.style.display = 'none';
+                connectButton.style.display = 'inline-block';
+                status.style.display = 'block';
+                status.textContent = 'Disconnected';
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 2000);
+            }
+        });
+
+        // Next button
+        nextButton.addEventListener('click', () => {
+            if (currentCall) {
+                currentCall.close();
+                remoteVideo.srcObject = null;
+                socket.emit('request-connection');
+                status.style.display = 'block';
+                status.textContent = 'Finding Next Match...';
+            }
         });
     </script>
 </body>
