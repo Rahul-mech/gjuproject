@@ -103,31 +103,34 @@
     #nextBtn:hover {
       background: #2b6cb0;
     }
-    #showPDFsBtn {
+    #showDriveBtn {
       background: #38a169;
       display: none;
     }
-    #showPDFsBtn:hover {
+    #showDriveBtn:hover {
       background: #2f855a;
     }
-    #pdf-list {
+    #drive-content {
       margin-top: 20px;
-      text-align: left;
       display: none;
     }
-    #pdf-list a {
-      display: block;
-      padding: 10px;
-      margin: 5px 0;
-      background: #2c5282;
-      color: #ffffff;
-      text-decoration: none;
+    #drive-content iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
       border-radius: 6px;
-      transition: all 0.3s ease;
     }
-    #pdf-list a:hover {
-      background: #2b6cb0;
-      transform: translateX(5px);
+    #drive-content p {
+      font-size: 16px;
+      color: #1a2e44;
+      margin-top: 10px;
+    }
+    #drive-content a {
+      color: #2c5282;
+      text-decoration: none;
+    }
+    #drive-content a:hover {
+      text-decoration: underline;
     }
     @media (max-width: 768px) {
       .container {
@@ -148,13 +151,16 @@
         flex-direction: column;
         gap: 10px;
       }
+      #drive-content iframe {
+        height: 300px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Previous Year Papers</h1>
-    <div class="progress">Step 1 of 3</div>
+    <div class="progress">Step 1 of 2</div>
 
     <!-- Step 1: University Selection -->
     <div class="step active" id="step1">
@@ -167,29 +173,23 @@
 
     <!-- Step 2: Branch Selection -->
     <div class="step" id="step2">
-      <div class="progress">Step 2 of 3</div>
-      <label for="branch">Select Branch:</label>
+      <div class="progress">Step 2 of 2</div>
+      <label for="branch">Select Department:</label>
       <select id="branch" onchange="validateStep(2)">
-        <option value="" disabled selected>Select Branch</option>
+        <option value="" disabled selected>Select Department</option>
       </select>
     </div>
 
-    <!-- Step 3: Semester Selection -->
-    <div class="step" id="step3">
-      <div class="progress">Step 3 of 3</div>
-      <label for="semester">Select Semester:</label>
-      <select id="semester" onchange="validateStep(3)">
-        <option value="" disabled selected>Select Semester</option>
-      </select>
+    <!-- Drive Content -->
+    <div id="drive-content">
+      <iframe src="https://drive.google.com/embeddedfolderview?id=1caoTXIdxQvZceWOdNymEA2SziWaGJKG3#list" title="Google Drive Folder"></iframe>
+      <p>If the content above doesn't load, <a href="https://drive.google.com/drive/folders/1caoTXIdxQvZceWOdNymEA2SziWaGJKG3?usp=sharing" target="_blank">click here</a> to view the papers directly on Google Drive.</p>
     </div>
-
-    <!-- PDF List -->
-    <div id="pdf-list"></div>
 
     <div class="buttons">
       <button id="backBtn" onclick="goBack()">Back</button>
       <button id="nextBtn" onclick="nextStep()">Next</button>
-      <button id="showPDFsBtn" onclick="showPDFs()">Show Papers</button>
+      <button id="showDriveBtn" onclick="showDriveContent()">Show Papers</button>
     </div>
   </div>
 
@@ -204,84 +204,14 @@
       ]
     };
 
-    const pdfs = {
-      gju: {
-        "Mechanical Engineering": {
-          1: [],
-          2: [],
-          3: [
-            "https://drive.google.com/file/d/1q2w3e4r5t6y7u8i9o0p/view?usp=sharing", // Replace with actual file ID for Thermodynamics
-            "https://drive.google.com/file/d/1a2s3d4f5g6h7j8k9l0z/view?usp=sharing"  // Replace with actual file ID for Mechanics of Materials
-          ],
-          4: [
-            "https://drive.google.com/file/d/1z2x3c4v5b6n7m8q9w0e/view?usp=sharing"  // Replace with actual file ID for Fluid Mechanics
-          ],
-          5: [
-            "https://drive.google.com/file/d/1p2o3i4u5y6t7r8e9w0q/view?usp=sharing"  // Replace with actual file ID for Heat Transfer
-          ],
-          6: [
-            "https://drive.google.com/file/d/1m2n3b4v5c6x7z8q9w0e/view?usp=sharing"  // Replace with actual file ID for Machine Design
-          ],
-          7: [
-            "https://drive.google.com/file/d/1k2j3h4g5f6d7s8a9p0o/view?usp=sharing"  // Replace with actual file ID for Robotics
-          ],
-          8: [
-            "https://drive.google.com/file/d/1l2k3j4h5g6f7d8s9a0p/view?usp=sharing"  // Replace with actual file ID for Automobile Engineering
-          ]
-        },
-        "Computer Science": {
-          1: [],
-          2: [],
-          3: [],
-          4: [],
-          5: [],
-          6: [],
-          7: [],
-          8: []
-        },
-        "Civil Engineering": {
-          1: [],
-          2: [],
-          3: [],
-          4: [],
-          5: [],
-          6: [],
-          7: [],
-          8: []
-        },
-        "Artificial Intelligence and Machine Learning": {
-          1: [],
-          2: [],
-          3: [],
-          4: [],
-          5: [],
-          6: [],
-          7: [],
-          8: []
-        },
-        "Electronics and Communications": {
-          1: [],
-          2: [],
-          3: [],
-          4: [],
-          5: [],
-          6: [],
-          7: [],
-          8: []
-        }
-      }
-    };
-
     let currentStep = 1;
 
     function validateStep(step) {
       const university = document.getElementById('university').value;
       const branch = document.getElementById('branch').value;
-      const semester = document.getElementById('semester').value;
 
       if (step === 1 && university) return true;
       if (step === 2 && branch) return true;
-      if (step === 3 && semester) return true;
       return false;
     }
 
@@ -293,13 +223,6 @@
         } else {
           alert("Please select a university!");
         }
-      } else if (currentStep === 2) {
-        if (validateStep(2)) {
-          updateSemesters();
-          showStep(3);
-        } else {
-          alert("Please select a branch!");
-        }
       }
     }
 
@@ -307,6 +230,7 @@
       if (currentStep > 1) {
         showStep(currentStep - 1);
         if (currentStep === 2) document.getElementById('backBtn').style.display = 'none';
+        document.getElementById('drive-content').style.display = 'none';
       }
     }
 
@@ -322,22 +246,18 @@
       if (step === 1) {
         document.getElementById('backBtn').style.display = 'none';
         document.getElementById('nextBtn').style.display = 'inline-block';
-        document.getElementById('showPDFsBtn').style.display = 'none';
+        document.getElementById('showDriveBtn').style.display = 'none';
       } else if (step === 2) {
         document.getElementById('backBtn').style.display = 'inline-block';
-        document.getElementById('nextBtn').style.display = 'inline-block';
-        document.getElementById('showPDFsBtn').style.display = 'none';
-      } else if (step === 3) {
-        document.getElementById('backBtn').style.display = 'inline-block';
         document.getElementById('nextBtn').style.display = 'none';
-        document.getElementById('showPDFsBtn').style.display = 'inline-block';
+        document.getElementById('showDriveBtn').style.display = 'inline-block';
       }
     }
 
     function updateBranches() {
       const university = document.getElementById('university').value;
       const branchSelect = document.getElementById('branch');
-      branchSelect.innerHTML = '<option value="" disabled selected>Select Branch</option>';
+      branchSelect.innerHTML = '<option value="" disabled selected>Select Department</option>';
       if (university) {
         universities[university].forEach(branch => {
           const option = document.createElement('option');
@@ -348,47 +268,21 @@
       }
     }
 
-    function updateSemesters() {
-      const semesterSelect = document.getElementById('semester');
-      semesterSelect.innerHTML = '<option value="" disabled selected>Select Semester</option>';
-      for (let i = 1; i <= 8; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = `Semester ${i}`;
-        semesterSelect.appendChild(option);
-      }
-    }
-
-    function showPDFs() {
-      const university = document.getElementById('university').value;
+    function showDriveContent() {
       const branch = document.getElementById('branch').value;
-      const semester = document.getElementById('semester').value;
-      const pdfList = document.getElementById('pdf-list');
+      const driveContent = document.getElementById('drive-content');
 
-      pdfList.style.display = 'block';
-      pdfList.innerHTML = '';
-
-      if (university && branch && semester) {
-        const availablePDFs = pdfs[university]?.[branch]?.[semester] || [];
-        if (availablePDFs.length > 0) {
-          availablePDFs.forEach((pdf, index) => {
-            const link = document.createElement('a');
-            link.href = pdf;
-            link.textContent = `Download ${branch} Sem ${semester} Paper ${index + 1}`;
-            link.target = '_blank';
-            pdfList.appendChild(link);
-          });
-        } else {
-          pdfList.innerHTML = '<p>No papers available for this selection.</p>';
-        }
+      if (branch === "Mechanical Engineering") {
+        driveContent.style.display = 'block';
       } else {
-        pdfList.innerHTML = '<p>Please complete all steps to view papers.</p>';
+        driveContent.style.display = 'none';
+        alert("Papers are currently available only for Mechanical Engineering.");
       }
     }
 
     function updateProgress() {
       document.querySelectorAll('.progress').forEach(p => {
-        p.textContent = `Step ${currentStep} of 3`;
+        p.textContent = `Step ${currentStep} of 2`;
       });
     }
   </script>
