@@ -11,7 +11,7 @@
       padding: 0;
     }
     body {
-      font-family: 'Roboto', Arial, sans-serif; /* Professional font */
+      font-family: 'Roboto', Arial, sans-serif;
       background: linear-gradient(135deg, #f0f4f8, #d9e6f2);
       color: #1a2e44;
       line-height: 1.6;
@@ -28,7 +28,7 @@
       padding: 40px;
       border-radius: 12px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      border-left: 5px solid #2c5282; /* Professional accent */
+      border-left: 5px solid #2c5282;
     }
     h1 {
       text-align: center;
@@ -207,18 +207,31 @@
     const pdfs = {
       gju: {
         "Mechanical Engineering": {
-          1: ["https://example.com/gju/mech/sem1/exam1.pdf"],
-          2: ["https://example.com/gju/mech/sem2/exam1.pdf"],
-          3: [],
-          4: [],
-          5: [],
-          6: [],
-          7: [],
-          8: []
+          1: [],
+          2: [],
+          3: [
+            "https://drive.google.com/file/d/1q2w3e4r5t6y7u8i9o0p/view?usp=sharing", // Replace with actual file ID for Thermodynamics
+            "https://drive.google.com/file/d/1a2s3d4f5g6h7j8k9l0z/view?usp=sharing"  // Replace with actual file ID for Mechanics of Materials
+          ],
+          4: [
+            "https://drive.google.com/file/d/1z2x3c4v5b6n7m8q9w0e/view?usp=sharing"  // Replace with actual file ID for Fluid Mechanics
+          ],
+          5: [
+            "https://drive.google.com/file/d/1p2o3i4u5y6t7r8e9w0q/view?usp=sharing"  // Replace with actual file ID for Heat Transfer
+          ],
+          6: [
+            "https://drive.google.com/file/d/1m2n3b4v5c6x7z8q9w0e/view?usp=sharing"  // Replace with actual file ID for Machine Design
+          ],
+          7: [
+            "https://drive.google.com/file/d/1k2j3h4g5f6d7s8a9p0o/view?usp=sharing"  // Replace with actual file ID for Robotics
+          ],
+          8: [
+            "https://drive.google.com/file/d/1l2k3j4h5g6f7d8s9a0p/view?usp=sharing"  // Replace with actual file ID for Automobile Engineering
+          ]
         },
         "Computer Science": {
-          1: ["https://example.com/gju/cs/sem1/exam1.pdf"],
-          2: ["https://example.com/gju/cs/sem2/exam1.pdf"],
+          1: [],
+          2: [],
           3: [],
           4: [],
           5: [],
@@ -358,10 +371,10 @@
       if (university && branch && semester) {
         const availablePDFs = pdfs[university]?.[branch]?.[semester] || [];
         if (availablePDFs.length > 0) {
-          availablePDFs.forEach(pdf => {
+          availablePDFs.forEach((pdf, index) => {
             const link = document.createElement('a');
             link.href = pdf;
-            link.textContent = `Download ${branch} Sem ${semester} Paper`;
+            link.textContent = `Download ${branch} Sem ${semester} Paper ${index + 1}`;
             link.target = '_blank';
             pdfList.appendChild(link);
           });
