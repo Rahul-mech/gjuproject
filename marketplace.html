@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketplace - Classmate</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+      color: #1e2937;
+    }
+
+    header {
+      background: white;
+      padding: 1rem 5%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid #3b82f6;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(rgba(30, 64, 175, 0.9), rgba(30, 64, 175, 0.85)),
+                  url('https://raw.githubusercontent.com/rahul-mech/gjuproject/main/DALL%C2%B7E%202025-02-18%2018.18.19%20-%20A%20high-resolution%2C%20epic%20scene%20depicting%20Lord%20Krishna%20g[...]
+      background-size: cover;
+      color: white;
+    }
+
+    .search-bar {
+      max-width: 700px;
+      margin: 20px auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+    }
+
+    .filters {
+      max-width: 1200px;
+      margin: 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .marketplace {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 5%;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      margin: 30px 0;
+      color: #1e40af;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #16a34a;
+      margin: 10px 0;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .post-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #16a34a;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 200;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 300;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 25px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <img src="https://raw.githubusercontent.com/rahul-mech/gjuproject/main/DALL%C2%B7E%202025-03-08%2019.13.33%20-%20A%20modern%20and%20minimalistic%20logo%20featuring%20a%20group%20of%20studen[...]
+           alt="Logo" class="logo">
+      <h1 style="color:#1e40af;">CLASSMATE</h1>
+    </div>
+    <a href="index.html" style="color:#3b82f6; font-weight:600; text-decoration:none;">← Back to Home</a>
+  </header>
+
+  <section class="hero">
+    <h2>Indian Marketplace</h2>
+    <p>Buy • Sell • Exchange among GJU Students</p>
+  </section>
+
+  <div class="marketplace">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search notes, books, cycle, calculator..." onkeyup="filterItems()">
+    </div>
+
+    <div class="filters">
+      <select onchange="filterItems()">
+        <option value="">All Categories</option>
+        <option>Notes & Books</option>
+        <option>Stationery</option>
+        <option>Electronics</option>
+        <option>Cycle & Vehicle</option>
+        <option>Furniture</option>
+        <option>Others</option>
+      </select>
+      <select onchange="filterItems()">
+        <option value="">Any Price</option>
+        <option value="500">Under ₹500</option>
+        <option value="1000">Under ₹1000</option>
+        <option value="2000">Under ₹2000</option>
+      </select>
+    </div>
+
+    <h2 class="section-title">Available Items</h2>
+    <div class="cards" id="itemsContainer">
+      <!-- Items will be loaded by JS -->
+    </div>
+  </div>
+
+  <button class="post-btn" onclick="showPostModal()">
+    <i class="fas fa-plus"></i> Post Your Ad
+  </button>
+
+  <!-- Post Ad Modal -->
+  <div class="modal" id="postModal">
+    <div class="modal-content">
+      <h2>Post Your Advertisement</h2>
+      <p>As a broker, you can approve these later.</p>
+      <input type="text" placeholder="Item Name" style="width:100%; padding:12px; margin:10px 0;"><br>
+      <input type="number" placeholder="Price (₹)" style="width:100%; padding:12px; margin:10px 0;"><br>
+      <textarea placeholder="Description" style="width:100%; height:100px; padding:12px; margin:10px 0;"></textarea><br>
+      <select style="width:100%; padding:12px; margin:10px 0;">
+        <option>Notes & Books</option>
+        <option>Stationery</option>
+        <option>Electronics</option>
+        <option>Cycle & Vehicle</option>
+      </select><br>
+      <button class="btn" onclick="postAd()">Post Ad</button>
+      <button class="btn" style="background:#64748b; margin-left:10px;" onclick="hidePostModal()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      { title: "Engineering Mathematics Notes", price: 350, category: "Notes & Books", img: "https://via.placeholder.com/300x180?text=Notes" },
+      { title: "Second Hand Cycle (Hero)", price: 2800, category: "Cycle & Vehicle", img: "https://via.placeholder.com/300x180?text=Cycle" },
+      { title: "Casio Scientific Calculator", price: 650, category: "Electronics", img: "https://via.placeholder.com/300x180?text=Calculator" },
+      { title: "Physics Lab Manual", price: 180, category: "Notes & Books", img: "https://via.placeholder.com/300x180?text=Manual" },
+      { title: "Drawing Instruments Set", price: 420, category: "Stationery", img: "https://via.placeholder.com/300x180?text=Instruments" },
+    ];
+
+    function renderItems(filteredItems) {
+      const container = document.getElementById('itemsContainer');
+      container.innerHTML = '';
+      filteredItems.forEach(item => {
+        container.innerHTML += `
+          <div class="card">
+            <img src="\( {item.img}" alt=" \){item.title}">
+            <div class="card-body">
+              <h3>${item.title}</h3>
+              <p class="price">₹${item.price}</p>
+              <p><strong>Category:</strong> ${item.category}</p>
+              <button class="btn" style="margin-top:10px; width:100%;">Contact Seller</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterItems() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = items.filter(item => 
+        item.title.toLowerCase().includes(search)
+      );
+      renderItems(filtered);
+    }
+
+    function showPostModal() {
+      document.getElementById('postModal').style.display = 'block';
+    }
+
+    function hidePostModal() {
+      document.getElementById('postModal').style.display = 'none';
+    }
+
+    function postAd() {
+      alert("✅ Your Ad has been posted successfully!\n(As broker, you can manage all ads later)");
+      hidePostModal();
+    }
+
+    // Initial render
+    renderItems(items);
+  </script>
+</body>
+</html>
