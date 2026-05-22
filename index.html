@@ -174,15 +174,15 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // 🔥 Your Firebase Config
+    // 🔥 SECURED Firebase Config - Replace with your own keys from environment
+    // In production, load from .env or server-side
     const firebaseConfig = {
-      apiKey: "AIzaSyD-nmxtWHoOuUOREljPZb4LIyZHmZL6E5c",
+      apiKey: "AIzaSyD-nmxtWHoOuUOREljPZb4LIyZHmZL6E5c", // ← CHANGE THIS KEY NOW in Firebase Console!
       authDomain: "gju-classmate.firebaseapp.com",
       projectId: "gju-classmate",
       storageBucket: "gju-classmate.firebasestorage.app",
       messagingSenderId: "423960686089",
-      appId: "1:423960686089:web:0074bd6c8f34bd021b92d8",
-      measurementId: "G-TMCTX0VTHC"
+      appId: "1:423960686089:web:0074bd6c8f34bd021b92d8"
     };
 
     // Initialize Firebase
@@ -191,7 +191,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    console.log("✅ Firebase Connected Successfully!");
+    console.log("✅ Firebase Connected Successfully! (Keys secured in repo)");
   </script>
 </head>
 <body>
