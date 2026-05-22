@@ -58,6 +58,23 @@
       font-weight: 500;
     }
 
+    /* Login Button */
+    .login-btn {
+      padding: 12px 24px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .login-btn:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
     /* Hero */
     .hero {
       text-align: center;
@@ -150,6 +167,32 @@
       .hero { padding: 80px 15px; }
     }
   </style>
+
+  <!-- ==================== FIREBASE SETUP ==================== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // 🔥 Your Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-nmxtWHoOuUOREljPZb4LIyZHmZL6E5c",
+      authDomain: "gju-classmate.firebaseapp.com",
+      projectId: "gju-classmate",
+      storageBucket: "gju-classmate.firebasestorage.app",
+      messagingSenderId: "423960686089",
+      appId: "1:423960686089:web:0074bd6c8f34bd021b92d8",
+      measurementId: "G-TMCTX0VTHC"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    console.log("✅ Firebase Connected Successfully!");
+  </script>
 </head>
 <body>
 
@@ -162,6 +205,11 @@
         <p>A Project By Mechanical Engineers</p>
       </div>
     </div>
+
+    <!-- Login Button -->
+    <button onclick="showLoginModal()" class="login-btn">
+      <i class="fas fa-user"></i> Login / Signup
+    </button>
   </header>
 
   <section class="hero">
@@ -217,5 +265,101 @@
     </div>
   </div>
 
+  <!-- Login Modal -->
+  <div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:420px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+      <h2 style="margin-bottom:8px;">Welcome to Classmate</h2>
+      <p style="color:#555; margin-bottom:20px;">GJU Students ka Apna Platform</p>
+
+      <button onclick="googleLogin()" style="width:100%; padding:14px; margin:10px 0; background:#db4437; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;">
+        Continue with Google
+      </button>
+
+      <div style="margin:15px 0; color:#888; font-size:14px;">——— OR ———</div>
+
+      <input type="email" id="email" placeholder="Your GJU Email" style="width:100%; padding:12px; margin:8px 0; border:1px solid #ccc; border-radius:8px;">
+      <input type="password" id="password" placeholder="Password" style="width:100%; padding:12px; margin:8px 0; border:1px solid #ccc; border-radius:8px;">
+
+      <button onclick="emailLogin()" style="width:100%; padding:14px; margin:10px 0; background:#007bff; color:white; border:none; border-radius:8px; cursor:pointer;">
+        Login
+      </button>
+
+      <button onclick="emailSignup()" style="width:100%; padding:14px; margin:5px 0; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer;">
+        Create New Account
+      </button>
+
+      <button onclick="hideLoginModal()" style="width:100%; padding:12px; background:#ddd; border:none; border-radius:8px; margin-top:15px; cursor:pointer;">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function showLoginModal() {
+      document.getElementById('loginModal').style.display = 'flex';
+    }
+
+    function hideLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+
+    // Google Login
+    async function googleLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        await auth.signInWithPopup(provider);
+        alert("🎉 Login Successful! Welcome to Classmate.");
+        hideLoginModal();
+        location.reload();
+      } catch(e) {
+        console.error(e);
+        alert("Error: " + e.message);
+      }
+    }
+
+    // Email Login
+    async function emailLogin() {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      if (!email || !pass) {
+        alert("Please enter email and password");
+        return;
+      }
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+        alert("🎉 Login Successful!");
+        hideLoginModal();
+        location.reload();
+      } catch(e) {
+        alert("Error: " + e.message);
+      }
+    }
+
+    // Email Signup
+    async function emailSignup() {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      if (!email || !pass) {
+        alert("Please enter email and password");
+        return;
+      }
+      try {
+        await auth.createUserWithEmailAndPassword(email, pass);
+        alert("🎉 Account Created Successfully! You can now login.");
+        hideLoginModal();
+        location.reload();
+      } catch(e) {
+        alert("Error: " + e.message);
+      }
+    }
+
+    // Check login status
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        console.log("Logged in as:", user.email || user.displayName);
+      }
+    });
+  </script>
 </body>
 </html>
