@@ -1,56 +1,103 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const admin = require('firebase-admin');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
 
-// Serve static files (like discuss.html) from the root directory
+app.use(cors());
+app.use(express.json());
 app.use(express.static(__dirname));
 
-// Route to serve discuss.html
+// Initialize Firebase Admin (use service account or env vars in production)
+// For Render: upload service account JSON or use env vars
+if (!admin.apps.length) {
+  admin.initializeApp({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    // credential: admin.credential.cert(...) for full security
+  });
+}
+
+// Auth middleware
+function verifyToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'No token' });
+  }
+  const idToken = authHeader.split('Bearer ')[1];
+  admin.auth().verifyIdToken(idToken)
+    .then(decodedToken => {
+      req.user = decodedToken;
+      next();
+    })
+    .catch(error => {
+      console.error('Token verification error:', error);
+      res.status(403).json({ error: 'Invalid token' });
+    });
+}
+
+// Public routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'discuss.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const users = []; // Store available users
+// Protected API example
+app.get('/api/dashboard', verifyToken, async (req, res) => {
+  try {
+    const userDoc = await admin.firestore().collection('users').doc(req.user.uid).get();
+    res.json({ user: req.user, profile: userDoc.data() || {} });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Socket.io with auth
+const users = [];
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) return next(new Error('Authentication error'));
+  admin.auth().verifyIdToken(token)
+    .then(decoded => {
+      socket.user = decoded;
+      next();
+    })
+    .catch(() => next(new Error('Invalid token')));
+});
 
 io.on('connection', socket => {
-    console.log('New user connected:', socket.id);
+  console.log('Authenticated user connected:', socket.user.email);
 
-    // When a new user joins
-    socket.on('new-user', peerId => {
-        users.push({ socketId: socket.id, peerId });
-        console.log('Current users:', users);
-    });
+  socket.on('new-user', peerId => {
+    users.push({ socketId: socket.id, peerId, user: socket.user });
+  });
 
-    // When a user requests a connection
-    socket.on('request-connection', () => {
-        const currentUser = users.find(u => u.socketId === socket.id);
-        const availableUsers = users.filter(u => u.socketId !== socket.id);
+  socket.on('request-connection', () => {
+    // ... existing logic, enhanced with user info
+    const currentUser = users.find(u => u.socketId === socket.id);
+    const availableUsers = users.filter(u => u.socketId !== socket.id);
+    if (availableUsers.length > 0) {
+      const randomPeer = availableUsers[Math.floor(Math.random() * availableUsers.length)];
+      socket.emit('connect-to', randomPeer.peerId);
+      io.to(randomPeer.socketId).emit('connect-to', currentUser.peerId);
+    } else {
+      socket.emit('no-peers');
+    }
+  });
 
-        if (availableUsers.length > 0) {
-            const randomPeer = availableUsers[Math.floor(Math.random() * availableUsers.length)];
-            socket.emit('connect-to', randomPeer.peerId); // Tell user to connect
-            io.to(randomPeer.socketId).emit('connect-to', currentUser.peerId); // Tell peer
-        } else {
-            socket.emit('no-peers'); // No one available
-        }
-    });
-
-    // When user disconnects
-    socket.on('disconnect', () => {
-        const index = users.findIndex(u => u.socketId === socket.id);
-        if (index !== -1) {
-            users.splice(index, 1);
-            console.log('User disconnected, remaining:', users);
-        }
-    });
+  socket.on('disconnect', () => {
+    const index = users.findIndex(u => u.socketId === socket.id);
+    if (index !== -1) users.splice(index, 1);
+  });
 });
 
-const PORT = process.env.PORT || 3000; // Render ka port ya default 3000
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} with auth`);
 });
